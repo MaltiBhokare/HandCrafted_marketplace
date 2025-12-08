@@ -58,5 +58,5 @@ Discover heritage stories, backgrounds and traditions
 
 ### 🔽 Clone Repository
 ```sh
-git clone https://github.com/username/roots-crafts.git
-cd roots-crafts
+Github Repo link : https://github.com/MaltiBhokare/HandCrafted_marketplace.git
+Live Link : https://maltibhokare.github.io/HandCrafted_marketplace/
