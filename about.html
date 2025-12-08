@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • About</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <!-- Page styles -->
+  <style>
+    :root{
+      --txt:#eef2ff; --muted:#9aa4b2; --bg:#0b0e18;
+      --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 45%,#06b6d4 100%);
+      --grad-soft:linear-gradient(135deg,rgba(124,58,237,.16),rgba(37,99,235,.16) 45%,rgba(6,182,212,.16));
+      --radius:18px; --shadow:0 20px 45px rgba(17,24,39,.45);
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 12% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Floating orbs */
+    .scene{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+    .orb{position:absolute;filter:blur(32px);opacity:.28;mix-blend-mode:screen;background:var(--grad);border-radius:999px;animation:float 18s ease-in-out infinite}
+    .orb.o1{width:520px;height:520px;left:-120px;top:-140px}
+    .orb.o2{width:420px;height:420px;right:-140px;top:10%;animation-delay:3s}
+    .orb.o3{width:480px;height:480px;left:22%;bottom:-160px;animation-delay:6s}
+    @keyframes float{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-40px,0)}100%{transform:translate3d(0,0,0)}}
+
+    /* Navbar */
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .navbar .nav-link{position:relative;color:#e5e7eb!important;opacity:.9}
+    .navbar .nav-link.active,.navbar .nav-link:hover{opacity:1}
+    .navbar .nav-link::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--grad);border-radius:999px;transform:scaleX(0);transition:transform .25s ease}
+    .navbar .nav-link:hover::after,.navbar .nav-link.active::after{transform:scaleX(1)}
+
+    .section{padding:72px 0}
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{color:var(--muted)!important}
+
+    .card{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.94));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius); box-shadow:0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      overflow:hidden;
+    }
+    .card:hover{transform:translateY(-5px); border-color:rgba(124,58,237,.35)}
+    .card-img-top{object-fit:cover;height:220px}
+
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    /* TIMELINE (new 3-column grid: Year | Line | Content) */
+    .timeline { margin-top:.25rem; }
+    .t-row{
+      display:grid;
+      grid-template-columns: 84px 24px 1fr; /* Year | Line | Content */
+      column-gap:16px;
+      align-items:start;
+      padding:10px 0;
+      position:relative;
+    }
+    .t-year{
+      font-weight:700;
+      letter-spacing: .5px;
+      color:#e6e9ff;
+      opacity:.95;
+      text-align:right;
+      padding-right:6px;
+      min-width:84px;
+    }
+    .t-line{
+      position:relative;
+      min-height:32px;
+    }
+    .t-line::before{ /* vertical line */
+      content:"";
+      position:absolute;
+      left:11px;
+      top:0; bottom:0;
+      width:2px;
+      background:rgba(255,255,255,.12);
+    }
+    .t-line::after{  /* dot */
+      content:"";
+      position:absolute;
+      left:6px;                 /* dot centered on the line (11px center - 5px radius) */
+      top:.58rem;
+      width:10px; height:10px; border-radius:50%;
+      background:var(--grad);
+      box-shadow:0 0 0 3px rgba(124,58,237,.18);
+    }
+    .t-row:last-child .t-line::before{ bottom:4px; } /* tidy end */
+
+    .t-title{ margin:0; font-weight:700; }
+    .t-desc{ margin:.25rem 0 0; color:var(--muted); }
+
+    /* Marquee */
+    #marquee{white-space:nowrap; overflow:hidden}
+
+    /* Scroll progress + back-to-top */
+    #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+    footer{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border-top:1px solid rgba(255,255,255,.06); }
+
+    @media (max-width:576px){
+      .section{padding:56px 0}
+      .card-img-top{height:180px}
+      .t-row{ grid-template-columns: 70px 24px 1fr; }
+      .t-year{ min-width:70px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- orbs -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- scroll progress -->
+  <div id="scrollProgress"></div>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+  <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="100" class="me-2">
+  <span style="font-size: 1.2em;">Roots</span>
+  <span style="font-size: 2em; font-weight: bolder;">&</span>
+  <span style="font-size: 1.2em;">Crafts</span>
+</a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html" aria-label="Login"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html" aria-label="Cart"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Intro -->
+  <header class="band section">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="section-title mb-2"><span class="dot"></span><h1 class="fw-bold mb-0">About Us</h1></div>
+          <p class="lead-muted">Local Artisans is a curated marketplace that celebrates handmade crafts, cultural stories, and sustainable livelihoods.</p>
+          <ul class="mb-4">
+            <li>Fair visibility & pricing for artisans</li>
+            <li>Authentic stories, workshops, and archives</li>
+            <li>Community-first, culture-forward</li>
+          </ul>
+          <div class="d-flex gap-2">
+            <a class="btn btn-primary" href="products.html">Browse Products</a>
+            <a class="btn btn-outline-secondary" href="workshops.html">Join a Workshop</a>
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="zoom-in">
+          <img src="assets/img/w1.jpg" class="img-fluid rounded-3 shadow-sm" alt="About hero">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mission / Values -->
+  <section class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold"><i class="bi bi-heart me-1"></i> Our Mission</h5>
+            <p class="lead-muted mb-0">Empower makers with fair markets, transparent stories, and skill-sharing programs that sustain legacy crafts.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="60">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold"><i class="bi bi-globe2 me-1"></i> Our Values</h5>
+            <ul class="lead-muted mb-0 ps-3">
+              <li>Respect for lineage & land</li>
+              <li>Fairness & transparency</li>
+              <li>Design with dignity</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="120">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold"><i class="bi bi-people me-1"></i> Our Approach</h5>
+            <p class="lead-muted mb-0">We work directly with artisan clusters, documenting processes and co-creating collections with climate-kind materials.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section band">
+    <div class="container">
+      <div class="row text-center g-4">
+        <div class="col-6 col-md-3" data-aos="fade-up"><h2 class="display-6 fw-bold" id="s1">0</h2><div class="lead-muted">Artisans</div></div>
+        <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="40"><h2 class="display-6 fw-bold" id="s2">0</h2><div class="lead-muted">Products</div></div>
+        <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="80"><h2 class="display-6 fw-bold" id="s3">0</h2><div class="lead-muted">Workshops</div></div>
+        <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="120"><h2 class="display-6 fw-bold" id="s4">0</h2><div class="lead-muted">Regions</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline (updated markup) -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h4 class="mb-0 fw-semibold">Our Journey</h4></div>
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="card p-4">
+            <div class="timeline">
+              <div class="t-row">
+                <div class="t-year">2019</div>
+                <div class="t-line"></div>
+                <div class="t-body">
+                  <h6 class="t-title">Field Notes Begin</h6>
+                  <p class="t-desc small">First documentation trips to Kutch and Bastar.</p>
+                </div>
+              </div>
+
+              <div class="t-row">
+                <div class="t-year">2021</div>
+                <div class="t-line"></div>
+                <div class="t-body">
+                  <h6 class="t-title">Community Workshops</h6>
+                  <p class="t-desc small">Pilot dye & pottery sessions with local studios.</p>
+                </div>
+              </div>
+
+              <div class="t-row">
+                <div class="t-year">2023</div>
+                <div class="t-line"></div>
+                <div class="t-body">
+                  <h6 class="t-title">Marketplace Launch</h6>
+                  <p class="t-desc small">Fair-trade storefront with transparent sourcing.</p>
+                </div>
+              </div>
+
+              <div class="t-row">
+                <div class="t-year">2025</div>
+                <div class="t-line"></div>
+                <div class="t-body">
+                  <h6 class="t-title">Archive & Residency</h6>
+                  <p class="t-desc small">Living archive and seasonal designer residencies.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="card p-4 h-100" data-aos="zoom-in">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-megaphone me-1"></i> What we believe</h6>
+            <div id="marquee" class="small lead-muted">
+              <span class="me-5">“Craft remembers the land.”</span>
+              <span class="me-5">“Fair pay is design.”</span>
+              <span class="me-5">“Hands are libraries.”</span>
+              <span class="me-5">“Sustainability is tradition done kindly.”</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team slider -->
+  <section class="section band">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h4 class="mb-0 fw-semibold">Team & Collaborators</h4></div>
+        <span class="small lead-muted">Swipe →</span>
+      </div>
+      <div class="swiper" id="teamSwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><div class="card h-100 p-4 text-center"><img src="assets/img/b1.png" class="rounded mb-3" alt="" style="height:120px;object-fit:cover"><h6 class="mb-1">Aditi • Curation</h6><div class="small lead-muted">Field research</div></div></div>
+          <div class="swiper-slide"><div class="card h-100 p-4 text-center"><img src="assets/img/w2.jpg" class="rounded mb-3" alt="" style="height:120px;object-fit:cover"><h6 class="mb-1">Rohan • Design</h6><div class="small lead-muted">Material lab</div></div></div>
+          <div class="swiper-slide"><div class="card h-100 p-4 text-center"><img src="assets/img/q1.png" class="rounded mb-3" alt="" style="height:120px;object-fit:cover"><h6 class="mb-1">Sana • Community</h6><div class="small lead-muted">Workshops</div></div></div>
+          <div class="swiper-slide"><div class="card h-100 p-4 text-center"><img src="assets/img/q2.png" class="rounded mb-3" alt="" style="height:120px;object-fit:cover"><h6 class="mb-1">Om • Tech</h6><div class="small lead-muted">Marketplace</div></div></div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h4 class="mb-0 fw-semibold">FAQ</h4></div>
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="accordion" id="faq">
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1">How do you ensure fair pricing?</button></h2>
+              <div id="q1" class="accordion-collapse collapse show" data-bs-parent="#faq"><div class="accordion-body">We co-create price sheets with makers, factoring time, materials, overheads and skill rarity. Platform fees are transparent.</div></div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">Are materials sustainable?</button></h2>
+              <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body">We prefer natural or up-cycled inputs, low-water processes, and local supply loops. Each product page lists details.</div></div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3">Can I visit a workshop?</button></h2>
+              <div id="q3" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body">Yes! See the Workshops page for open studio days and learning sessions with safety & group size limits.</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-envelope me-1"></i> Newsletter</h6>
+            <p class="small lead-muted">Stories & openings once a month.</p>
+            <div class="input-group">
+              <input class="form-control" placeholder="Email address">
+              <button class="btn btn-primary">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extra depth -->
+  <section class="section band">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold">About — Spotlight</h5>
+            <p class="lead-muted">Extended section to make the page more immersive and scroll friendly. Add real photos, quotes, or timelines here.</p>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="70">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold">Behind the scenes</h5>
+            <p class="lead-muted">Share process details, artisan interviews, material sources, or cultural notes for richer engagement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="fCount1">0</span><span class="small text-secondary">Readers</span></div>
+            <div><span class="h4 mb-0 d-block" id="fCount2">0</span><span class="small text-secondary">Saves</span></div>
+            <div><span class="h4 mb-0 d-block" id="fCount3">0</span><span class="small text-secondary">Shares</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up-short fs-4"></i></button>
+
+  <!-- Core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+
+  <!-- Page behavior -->
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Active nav
+    const path = location.pathname.split('/').pop() || 'about.html';
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      const href = a.getAttribute('href'); if (href && href.indexOf(path) !== -1) a.classList.add('active');
+    });
+
+    // Swiper (team)
+    if (window.Swiper && document.querySelector('#teamSwiper')) {
+      new Swiper('#teamSwiper', {
+        slidesPerView: 1.1, spaceBetween: 16, loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3}, 1200:{slidesPerView:4} }
+      });
+    }
+
+    // Scroll progress + back-to-top
+    const progressEl = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backToTop');
+    document.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / ((h.scrollHeight - h.clientHeight) || 1) * 100;
+      if (progressEl) progressEl.style.width = scrolled + '%';
+      if (backTop){ h.scrollTop > 240 ? backTop.classList.add('show') : backTop.classList.remove('show'); }
+    }, { passive:true });
+    backTop && backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // CountUp stats & footer KPIs
+    const topStats = [
+      { id:'s1', end:120, suffix:'+' },
+      { id:'s2', end:540, suffix:'+' },
+      { id:'s3', end:28,  suffix:''  },
+      { id:'s4', end:12,  suffix:''  },
+    ];
+    const footerCounters = [
+      { id:'fCount1', end:4200, suffix:'+' },
+      { id:'fCount2', end:980,  suffix:'+' },
+      { id:'fCount3', end:310,  suffix:'+' }
+    ];
+    function startCount(items){
+      if (!window.CountUp) return;
+      items.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.6, suffix:c.suffix });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if (e.isIntersecting){ startCount(topStats.concat(footerCounters)); } });
+    }, {threshold:.4});
+    document.querySelectorAll('#s1,#s2,#s3,#s4,#fCount1,#fCount2,#fCount3').forEach(el=>io.observe(el));
+
+    // GSAP entrance for cards & rows
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('.card').forEach((el, i)=>{
+        gsap.from(el, {
+          y: 28, opacity: 0,
+          scrollTrigger: { trigger: el, start: 'top 85%' },
+          duration:.45, delay:(i % 6) * 0.02
+        });
+      });
+    }
+
+    // Simple marquee
+    const mq = document.getElementById('marquee');
+    if (mq){
+      let x = 0; const tick = ()=>{ x = (x - 0.6); mq.scrollLeft = Math.abs(x); requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    }
+  </script>
+</body>
+</html>

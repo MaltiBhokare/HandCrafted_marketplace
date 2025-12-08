@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Profile</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --txt:#eef2ff; --muted:#9aa4b2; --bg:#0b0e18;
+      --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 45%,#06b6d4 100%);
+      --radius:18px; --shadow:0 20px 45px rgba(17,24,39,.45);
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 12% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+    }
+
+    /* Ambient blobs */
+    .scene{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+    .orb{position:absolute;filter:blur(32px);opacity:.28;mix-blend-mode:screen;background:var(--grad);border-radius:999px;animation:float 18s ease-in-out infinite}
+    .orb.o1{width:520px;height:520px;left:-120px;top:-140px}
+    .orb.o2{width:420px;height:420px;right:-140px;top:10%;animation-delay:3s}
+    .orb.o3{width:480px;height:480px;left:22%;bottom:-160px;animation-delay:6s}
+    @keyframes float{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-40px,0)}100%{transform:translate3d(0,0,0)}}
+
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+
+    .section{ padding:76px 0 }
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{ color:var(--muted)!important }
+
+    .card-elevated{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.94));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius); box-shadow:0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, border-color .25s ease;
+    }
+    .card-elevated:hover{ transform:translateY(-4px); border-color:rgba(124,58,237,.30) }
+
+    /* Sidebar list group */
+    .list-group .list-group-item{background:rgba(255,255,255,.03);color:var(--txt);border-color:rgba(255,255,255,.08)}
+    .list-group .list-group-item.active{background:linear-gradient(135deg,#7c3aed,#2563eb);border-color:transparent}
+
+    /* Avatar */
+    .avatar{
+      width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#06b6d4);
+      display:grid;place-items:center;font-weight:800;color:#0b0e18;box-shadow:0 10px 30px rgba(2,6,23,.35)
+    }
+
+    /* Counters */
+    .metric .num{font-size:1.6rem;font-weight:800}
+    .metric .lbl{font-size:.8rem;color:var(--muted)}
+
+    /* Wishlist grid placeholders */
+    .product-card{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03)}
+    .product-img{aspect-ratio:4/3;background:radial-gradient(120% 120% at 20% 10%, rgba(124,58,237,.25), rgba(6,182,212,.08), transparent 70%)}
+
+    /* Timeline */
+    .timeline{position:relative;padding-left:68px}
+    .timeline::before{content:"";position:absolute;left:32px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.14)}
+    .t-item{position:relative;margin-bottom:26px}
+    .t-item::before{content:"";position:absolute;left:24px;top:.45rem;width:16px;height:16px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 4px rgba(124,58,237,.18)}
+    .t-item:last-child{margin-bottom:0}
+
+    /* Back-to-top */
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    @media (max-width:576px){ .section{padding:56px 0} .timeline{padding-left:56px} .timeline::before{left:28px} .t-item::before{left:20px} }
+  </style>
+</head>
+<body>
+  <!-- ambience -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="52" class="me-2">
+        <span style="font-size:1.1em;">Roots</span><span style="font-size:1.4em;font-weight:800;">&</span><span style="font-size:1.1em;">Crafts</span>
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="band section">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-8" data-aos="fade-right">
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar">U</div>
+            <div>
+              <h1 class="fw-bold mb-0">Hello, User 👋</h1>
+              <div class="small lead-muted">Welcome to your dashboard — manage saved items, workshops, and settings.</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card-elevated p-3">
+            <div class="row text-center">
+              <div class="col metric">
+                <div id="mWishlist" class="num">0</div>
+                <div class="lbl">Wishlist</div>
+              </div>
+              <div class="col metric">
+                <div id="mWorkshops" class="num">0</div>
+                <div class="lbl">Workshops</div>
+              </div>
+              <div class="col metric">
+                <div id="mBadges" class="num">0</div>
+                <div class="lbl">Badges</div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <button class="btn btn-primary btn-sm" data-bs-toggle="tab" data-bs-target="#tabWishlist">View Wishlist</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-md-3" data-aos="fade-up">
+          <div class="list-group sticky-md-top" style="top:88px">
+            <a class="list-group-item list-group-item-action active" data-bs-toggle="tab" href="#tabOverview"><i class="bi bi-speedometer2 me-2"></i>Overview</a>
+            <a class="list-group-item list-group-item-action" data-bs-toggle="tab" href="#tabWishlist"><i class="bi bi-heart me-2"></i>Wishlist</a>
+            <a class="list-group-item list-group-item-action" data-bs-toggle="tab" href="#tabWorkshops"><i class="bi bi-calendar2-week me-2"></i>Workshops</a>
+            <a class="list-group-item list-group-item-action" data-bs-toggle="tab" href="#tabActivity"><i class="bi bi-clock-history me-2"></i>Activity</a>
+            <a class="list-group-item list-group-item-action" data-bs-toggle="tab" href="#tabSettings"><i class="bi bi-gear me-2"></i>Settings</a>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-md-9">
+          <div class="tab-content">
+            <!-- Overview -->
+            <div class="tab-pane fade show active" id="tabOverview">
+              <div class="card-elevated p-4" data-aos="fade-up">
+                <h5 class="fw-bold mb-2">Overview</h5>
+                <p class="small lead-muted mb-4">Quick shortcuts and your latest actions.</p>
+                <div class="row g-3">
+                  <div class="col-md-4" data-aos="zoom-in"><a class="card-elevated p-3 d-block text-reset text-decoration-none h-100" href="#" data-bs-toggle="tab" data-bs-target="#tabWishlist"><i class="bi bi-heart fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Go to Wishlist</h6><div class="small lead-muted">See saved crafts</div></a></div>
+                  <div class="col-md-4" data-aos="zoom-in" data-aos-delay="60"><a class="card-elevated p-3 d-block text-reset text-decoration-none h-100" href="#" data-bs-toggle="tab" data-bs-target="#tabWorkshops"><i class="bi bi-calendar2-week fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Workshops</h6><div class="small lead-muted">Manage registrations</div></a></div>
+                  <div class="col-md-4" data-aos="zoom-in" data-aos-delay="120"><a class="card-elevated p-3 d-block text-reset text-decoration-none h-100" href="#" data-bs-toggle="tab" data-bs-target="#tabSettings"><i class="bi bi-gear fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Edit Profile</h6><div class="small lead-muted">Update details</div></a></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Wishlist -->
+            <div class="tab-pane fade" id="tabWishlist">
+              <div class="card-elevated p-4" data-aos="fade-up">
+                <h5 class="fw-bold">Wishlist</h5>
+                <p class="small lead-muted">Items you like will appear here. (Demo placeholders below.)</p>
+                <div class="row g-3">
+                  <!-- 6 placeholder cards -->
+                  <div class="col-sm-6 col-lg-4" data-aos="fade-up"><div class="product-card"><div class="product-img"></div><div class="p-3"><div class="fw-semibold">Terracotta Mug</div><div class="small lead-muted">₹699</div></div></div></div>
+                  <div class="col-sm-6 col-lg-4" data-aos="fade-up" data-aos-delay="40"><div class="product-card"><div class="product-img"></div><div class="p-3"><div class="fw-semibold">Block-print Scarf</div><div class="small lead-muted">₹1,299</div></div></div></div>
+                  <div class="col-sm-6 col-lg-4" data-aos="fade-up" data-aos-delay="80"><div class="product-card"><div class="product-img"></div><div class="p-3"><div class="fw-semibold">Bamboo Basket</div><div class="small lead-muted">₹899</div></div></div></div>
+                  <div class="col-sm-6 col-lg-4" data-aos="fade-up"><div class="product-card"><div class="product-img"></div><div class="p-3"><div class="fw-semibold">Warli Canvas</div><div class="small lead-muted">₹2,499</div></div></div></div>
+                  <div class="col-sm-6 col-lg-4" data-aos="fade-up" data-aos-delay="40"><div class="product-card"><div class="product-img"></div><div class="p-3"><div class="fw-semibold">Handloom Cushion</div><div class="small lead-muted">₹749</div></div></div></div>
+                  <div class="col-sm-6 col-lg-4" data-aos="fade-up" data-aos-delay="80"><div class="product-card"><div class="product-img"></div><div class="p-3"><div class="fw-semibold">Copper Bottle</div><div class="small lead-muted">₹1,799</div></div></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Workshops -->
+            <div class="tab-pane fade" id="tabWorkshops">
+              <div class="card-elevated p-4" data-aos="fade-up">
+                <h5 class="fw-bold">Your Workshop Registrations</h5>
+                <p class="small lead-muted">No live registrations—table below shows how it will look.</p>
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead><tr><th>Workshop</th><th>Date</th><th>Mode</th><th>Status</th><th></th></tr></thead>
+                    <tbody class="small">
+                      <tr>
+                        <td>Pottery Basics</td><td>—</td><td>Online</td>
+                        <td><span class="badge text-bg-secondary">Not Registered</span></td>
+                        <td><button class="btn btn-sm btn-outline-primary">Notify me</button></td>
+                      </tr>
+                      <tr>
+                        <td>Block Printing</td><td>—</td><td>Offline</td>
+                        <td><span class="badge text-bg-secondary">Not Registered</span></td>
+                        <td><button class="btn btn-sm btn-outline-primary">Notify me</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="tab-pane fade" id="tabActivity">
+              <div class="card-elevated p-4" data-aos="fade-up">
+                <h5 class="fw-bold">Recent Activity</h5>
+                <div class="timeline mt-3">
+                  <div class="t-item" data-aos="fade-up"><h6 class="fw-semibold mb-1">Saved “Terracotta Mug”</h6><div class="small lead-muted">2 days ago</div></div>
+                  <div class="t-item" data-aos="fade-up" data-aos-delay="60"><h6 class="fw-semibold mb-1">Visited “Workshops” page</h6><div class="small lead-muted">1 week ago</div></div>
+                  <div class="t-item" data-aos="fade-up" data-aos-delay="120"><h6 class="fw-semibold mb-1">Created account</h6><div class="small lead-muted">Just now (demo)</div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="tab-pane fade" id="tabSettings">
+              <div class="card-elevated p-4" data-aos="fade-up">
+                <h5 class="fw-bold">Settings</h5>
+                <div class="row g-3">
+                  <div class="col-md-6"><label class="form-label small">Full name</label><input class="form-control" placeholder="Your name"></div>
+                  <div class="col-md-6"><label class="form-label small">City</label><input class="form-control" placeholder="City"></div>
+                  <div class="col-md-6"><label class="form-label small">Email</label><input class="form-control" type="email" placeholder="you@example.com"></div>
+                  <div class="col-md-6"><label class="form-label small">Phone</label><input class="form-control" placeholder="+91-"></div>
+                  <div class="col-12"><button class="btn btn-primary">Save</button> <button class="btn btn-outline-secondary ms-2">Reset</button></div>
+                </div>
+              </div>
+            </div>
+
+          </div> <!-- /tab-content -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="card-elevated p-4 p-md-5 text-center" data-aos="fade-up">
+        <h5 class="fw-bold">Want to share your craft journey?</h5>
+        <p class="lead-muted mb-3">Submit a short story and get featured on our homepage.</p>
+        <a href="stories.html" class="btn btn-primary">Submit Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            <div><span class="h4 mb-0 d-block" id="countProducts">0</span><span class="small text-secondary">Products</span></div>
+            <div><span class="h4 mb-0 d-block" id="countWorkshops">0</span><span class="small text-secondary">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up-short fs-4"></i></button>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Counters
+    const c1 = new CountUp('mWishlist', 18, {duration:1.2}); c1.start();
+    const c2 = new CountUp('mWorkshops', 0, {duration:1.2}); c2.start();
+    const c3 = new CountUp('mBadges', 3, {duration:1.2}); c3.start();
+
+    // Back-to-top
+    const backTop = document.getElementById('backToTop');
+    document.addEventListener('scroll', () => {
+      document.documentElement.scrollTop > 240 ? backTop.classList.add('show') : backTop.classList.remove('show');
+    }, { passive:true });
+    backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // Animate tab content on show
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(t=>{
+      t.addEventListener('shown.bs.tab', e=>{
+        const pane = document.querySelector(e.target.getAttribute('href'));
+        if(pane){ pane.querySelectorAll('[data-aos]').forEach(el=>{ el.classList.remove('aos-animate'); }); setTimeout(()=>AOS.refreshHard(), 50); }
+      });
+    });
+  </script>
+</body>
+</html>

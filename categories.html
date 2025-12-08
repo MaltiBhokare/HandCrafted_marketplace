@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Categories</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <!-- Enhanced Theme Styles (non-breaking additions) -->
+  <style>
+    :root{
+      --bg-1:#0e0f12; --bg-2:#10131a; --muted:#9aa4b2; --txt:#eef2ff;
+      --grad: linear-gradient(135deg, #7c3aed 0%, #2563eb 45%, #06b6d4 100%);
+      --grad-soft: linear-gradient(135deg, rgba(124,58,237,.18), rgba(37,99,235,.18) 45%, rgba(6,182,212,.18));
+      --ring: 0 0 0 6px rgba(124,58,237,.15), inset 0 0 0 1px rgba(255,255,255,.06);
+      --shadow: 0 20px 45px rgba(17,24,39,.45);
+      --radius: 18px;
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg-1);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    .scene{ position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
+    .orb{ position:absolute; filter:blur(32px); opacity:.27; mix-blend-mode:screen;
+          background:var(--grad); border-radius:999px; animation:float 18s ease-in-out infinite; }
+    .orb.o1{width:520px;height:520px; left:-120px; top:-120px}
+    .orb.o2{width:420px;height:420px; right:-120px; top:12%; animation-delay:3s}
+    .orb.o3{width:480px;height:480px; left:20%; bottom:-140px; animation-delay:6s}
+    @keyframes float{ 0%{transform:translate3d(0,0,0)} 50%{transform:translate3d(0,-40px,0)} 100%{transform:translate3d(0,0,0)} }
+
+    .section{padding:70px 0}
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{color:var(--muted)!important}
+
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .navbar .nav-link{ position:relative; color:#e5e7eb!important; opacity:.9; }
+    .navbar .nav-link.active, .navbar .nav-link:hover{opacity:1}
+    .navbar .nav-link::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background:var(--grad); border-radius:999px; transform:scaleX(0); transform-origin:center; transition:transform .25s ease;
+    }
+    .navbar .nav-link:hover::after, .navbar .nav-link.active::after{transform:scaleX(1)}
+    .btn-outline-secondary,.btn-outline-primary{border-color:#94a3b8; color:#e5e7eb}
+    .btn-outline-secondary:hover,.btn-outline-primary:hover{background:var(--grad); border-color:transparent}
+
+    .card{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.92));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow: 0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .card:hover{ transform:translateY(-4px); border-color:rgba(124,58,237,.35) }
+    .card-img-top{ transition:transform .35s ease, filter .35s ease; filter:grayscale(12%) contrast(1.05) }
+    .card:hover .card-img-top{ transform:scale(1.03); filter:grayscale(0%) }
+    .category-tile{overflow:hidden; position:relative;}
+    .category-tile::before{
+      content:""; position:absolute; inset:0; border-radius:inherit;
+      box-shadow:var(--ring); opacity:0; transition:opacity .25s ease;
+    }
+    .category-tile:hover::before{opacity:1}
+
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    footer{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border-top:1px solid rgba(255,255,255,.06); }
+
+    .grayscale-hover{filter:grayscale(100%);transition:transform .35s ease,filter .35s ease,box-shadow .3s ease}
+    .grayscale-hover:hover{filter:grayscale(0%);transform:translateY(-3px) scale(1.02);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+
+    /* Materials swiper */
+    .materials-swiper .swiper-slide{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.92));
+      border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:22px; height:auto;
+    }
+
+    /* Masonry-ish gallery */
+    .masonry{column-count:1; column-gap:1rem}
+    .masonry .m-item{break-inside:avoid; margin:0 0 1rem 0}
+    @media (min-width:576px){ .masonry{column-count:2} }
+    @media (min-width:992px){ .masonry{column-count:3} }
+
+    @media (max-width:576px){ .section{padding:56px 0} }
+  </style>
+</head>
+<body>
+  <!-- floating gradient orbs -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- scroll progress -->
+  <div id="scrollProgress"></div>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+  <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="100" class="me-2">
+  <span style="font-size: 1.2em;">Roots</span>
+  <span style="font-size: 2em; font-weight: bolder;">&</span>
+  <span style="font-size: 1.2em;">Crafts</span>
+</a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Original Categories grid -->
+  <div class="container py-5">
+    <div class="section-title mb-4" data-aos="fade-up"><span class="dot"></span><h2 class="mb-0 fw-bold">Artisan Categories</h2></div>
+    <div class="row g-4">
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="0">
+        <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=pottery">
+          <img src="assets/img/p1.jpg" class="card-img-top grayscale-hover" alt="Pottery">
+          <div class="card-body text-center"><span class="fw-semibold">Pottery</span></div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="40">
+        <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=textiles">
+          <img src="assets/img/aa (5).jpg" class="card-img-top grayscale-hover" alt="Textiles">
+          <div class="card-body text-center"><span class="fw-semibold">Textiles</span></div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="80">
+        <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=woodwork">
+          <img src="assets/img/w2.jpg" class="card-img-top grayscale-hover" alt="Woodwork">
+          <div class="card-body text-center"><span class="fw-semibold">Woodwork</span></div>
+        </a>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="120">
+        <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=metal">
+          <img src="assets/img/m1.jpg" class="card-img-top grayscale-hover" alt="Metal">
+          <div class="card-body text-center"><span class="fw-semibold">Metal</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- New: Materials swiper band -->
+  <section class="band section">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h2 class="mb-0 fw-bold">Materials & Techniques</h2></div>
+        <div class="small lead-muted">Swipe →</div>
+      </div>
+      <div class="swiper materials-swiper" id="materialsSwiper" data-aos="fade-up">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <h6 class="fw-semibold mb-1">Ajrakh Block Printing</h6>
+            <p class="lead-muted mb-0">Natural indigo & madder, resist printing, sun dyeing.</p>
+          </div>
+          <div class="swiper-slide">
+            <h6 class="fw-semibold mb-1">Dhokra Lost-Wax</h6>
+            <p class="lead-muted mb-0">Cire perdue casting in brass/bronze with clay molds.</p>
+          </div>
+          <div class="swiper-slide">
+            <h6 class="fw-semibold mb-1">Blue Pottery</h6>
+            <p class="lead-muted mb-0">Quartz-based body with floral Persian motifs.</p>
+          </div>
+          <div class="swiper-slide">
+            <h6 class="fw-semibold mb-1">Saharanpur Wood Carving</h6>
+            <p class="lead-muted mb-0">Intricate jaali & floral in sheesham and mango wood.</p>
+          </div>
+          <div class="swiper-slide">
+            <h6 class="fw-semibold mb-1">Kutch Embroidery</h6>
+            <p class="lead-muted mb-0">Mirrorwork with vibrant threads; regional stitches.</p>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New: Masonry gallery with lightbox -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title mb-4"><span class="dot"></span><h2 class="mb-0 fw-bold">Category Inspiration</h2></div>
+      <div class="masonry" data-aos="fade-up">
+        <!-- Use your images; placeholders keep structure -->
+        <a href="assets/img/m2.jpg" class="m-item glightbox card overflow-hidden">
+          <img src="assets/img/m2.jpg" class="w-100 card-img-top" alt="Inspiration 1">
+        </a>
+        <a href="assets/img/h1.png" class="m-item glightbox card overflow-hidden">
+          <img src="assets/img/h1.png" class="w-100 card-img-top" alt="Inspiration 2">
+        </a>
+        <a href="assets/img/b2.png" class="m-item glightbox card overflow-hidden">
+          <img src="assets/img/b2.png" class="w-100 card-img-top" alt="Inspiration 3">
+        </a>
+        <a href="assets/img/b3.png" class="m-item glightbox card overflow-hidden">
+          <img src="assets/img/b3.png" class="w-100 card-img-top" alt="Inspiration 4">
+        </a>
+        <a href="assets/img/b4.png" class="m-item glightbox card overflow-hidden">
+          <img src="assets/img/b4.png" class="w-100 card-img-top" alt="Inspiration 5">
+        </a>
+        <a href="assets/img/h4.png" class="m-item glightbox card overflow-hidden">
+          <img src="assets/img/h4.png" class="w-100 card-img-top" alt="Inspiration 6">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Existing extended band (from your file, retained) -->
+  <section class="band section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold">Categories — Spotlight</h5>
+            <p class="lead-muted">Extended section to make the page more immersive and scroll friendly. Add real photos, quotes, or timelines here.</p>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="70">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold">Behind the scenes</h5>
+            <p class="lead-muted">Share process details, artisan interviews, material sources, or cultural notes for richer engagement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New: Region highlights (long content) -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Regions & Styles</h2></div>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-1">Kutch, Gujarat</h6>
+            <p class="lead-muted mb-0">Ajrakh, tie-dye, mud mirror work—earthy palettes & geometric repeat.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="70">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-1">Jaipur, Rajasthan</h6>
+            <p class="lead-muted mb-0">Blue pottery & Sanganeri prints—delicate florals with Persian influence.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="140">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-1">Saharanpur, UP</h6>
+            <p class="lead-muted mb-0">Wood carving—jaali, floral vines & inlay in rich hardwoods.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New: Process timeline -->
+  <section class="band section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">How Crafts Come Alive</h2></div>
+      <div class="row g-4">
+        <div class="col-md-3" data-aos="fade-up">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">1</div>
+            <h6 class="fw-semibold">Sourcing</h6>
+            <p class="lead-muted mb-0">Local clays, fibers, metals with minimal footprint.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="60">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">2</div>
+            <h6 class="fw-semibold">Design</h6>
+            <p class="lead-muted mb-0">Patterns rooted in heritage with contemporary flair.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="120">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">3</div>
+            <h6 class="fw-semibold">Crafting</h6>
+            <p class="lead-muted mb-0">Hand processes: wheel, loom, forge, chisel.</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="180">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">4</div>
+            <h6 class="fw-semibold">Finishing</h6>
+            <p class="lead-muted mb-0">Firing, dyeing, polishing, inspection & care.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extras row (keeps page feeling rich + responsive) -->
+  <section class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-grid-1x2 me-1"></i> Explore Grids</h6>
+            <p class="lead-muted mb-0">Browse curated mosaics of pottery, textiles, woodwork, and metal crafts.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="70">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-brightness-high me-1"></i> Seasonal Looks</h6>
+            <p class="lead-muted mb-0">See what’s trending this month across artisan categories.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="140">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-bag-heart me-1"></i> Gift Guides</h6>
+            <p class="lead-muted mb-0">Find handcrafted gifts by material, color palette, or region.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New: FAQ -->
+  <section class="band section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Category FAQs</h2></div>
+      <div class="accordion" id="catFaq" data-aos="fade-up">
+        <div class="accordion-item bg-transparent border rounded-3 mb-2">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+              How do you verify artisan categories?
+            </button>
+          </h2>
+          <div id="q1" class="accordion-collapse collapse" data-bs-parent="#catFaq">
+            <div class="accordion-body">
+              We map each product to its category based on materials, tools, and technique metadata provided by the artisan and verified by curators.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-transparent border rounded-3 mb-2">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+              Can products appear in multiple categories?
+            </button>
+          </h2>
+          <div id="q2" class="accordion-collapse collapse" data-bs-parent="#catFaq">
+            <div class="accordion-body">
+              Yes—hybrid crafts (e.g., wood + metal) are tagged to multiple categories for better discovery.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-transparent border rounded-3">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3">
+              How do I explore by region instead of category?
+            </button>
+          </h2>
+          <div id="q3" class="accordion-collapse collapse" data-bs-parent="#catFaq">
+            <div class="accordion-body">
+              Use Stories → Regions, or filter on Products by region tag (e.g., “Kutch”, “Jaipur”, “Saharanpur”).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New: Newsletter CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="card p-5 text-center" data-aos="zoom-in">
+        <h3 class="fw-bold mb-2">Get category drops & curator picks</h3>
+        <p class="lead-muted mb-4">No spam—just craft goodness.</p>
+        <div class="row g-2 justify-content-center">
+          <div class="col-sm-7"><input class="form-control form-control-lg" placeholder="Email address"></div>
+          <div class="col-sm-3 d-grid"><button class="btn btn-primary btn-lg">Subscribe</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            <div><span class="h4 mb-0 d-block" id="countProducts">0</span><span class="small text-secondary">Products</span></div>
+            <div><span class="h4 mb-0 d-block" id="countWorkshops">0</span><span class="small text-secondary">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <i class="bi bi-arrow-up-short fs-4"></i>
+  </button>
+
+  <!-- Core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- Page Behaviors (additive only) -->
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Active nav highlight
+    const path = location.pathname.split('/').pop() || 'categories.html';
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      const href = a.getAttribute('href'); if (href && href.indexOf(path) !== -1) a.classList.add('active');
+    });
+
+    // Scroll progress + back to top
+    const progressEl = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backToTop');
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / ((h.scrollHeight - h.clientHeight) || 1) * 100;
+      if (progressEl) progressEl.style.width = scrolled + '%';
+      if (backTop){
+        if (h.scrollTop > 240) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+      }
+    };
+    document.addEventListener('scroll', onScroll, { passive:true });
+    backTop && backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // Subtle tilt follow for category tiles (non-breaking)
+    document.querySelectorAll('.category-tile').forEach(tile => {
+      let rAF = null;
+      const set = (x, y) => {
+        const bx = tile.getBoundingClientRect();
+        theCX = bx.left + bx.width/2; theCY = bx.top + bx.height/2;
+        const dx = (x - theCX) / bx.width,  dy = (y - theCY) / bx.height;
+        tile.style.transform = `rotateX(${dy*-4}deg) rotateY(${dx*4}deg) translateY(-6px)`;
+      };
+      const leave = () => tile.style.transform = '';
+      tile.addEventListener('mousemove', e => {
+        if (rAF) cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(() => set(e.clientX, e.clientY));
+      });
+      tile.addEventListener('mouseleave', leave);
+    });
+
+    // Materials swiper
+    if (window.Swiper && document.querySelector('#materialsSwiper')) {
+      new Swiper('#materialsSwiper', {
+        slidesPerView: 1.1,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3} }
+      });
+    }
+
+    // Lightbox
+    if (window.GLightbox) GLightbox({ selector: '.glightbox', touchNavigation: true });
+
+    // CountUp footer KPIs (fires once on view)
+    const counters = [
+      { id:'countArtisans', end:120, suffix:'+' },
+      { id:'countProducts', end:540, suffix:'+' },
+      { id:'countWorkshops', end:28,  suffix:'' }
+    ];
+    const startCounters = () => {
+      if (!window.CountUp) return;
+      counters.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.6, suffix:c.suffix });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    };
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if (e.isIntersecting) startCounters(); });
+    }, {threshold:.4});
+    document.querySelectorAll('#countArtisans, #countProducts, #countWorkshops').forEach(el=>obs.observe(el));
+
+    // Tiny parallax nudge for cards
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('.card').forEach((card, i) => {
+        gsap.from(card, {
+          y: 24, opacity: 0,
+          scrollTrigger: { trigger: card, start: 'top 85%' , toggleActions:'play none none none' },
+          duration: .45, delay: (i % 6) * 0.02
+        });
+      });
+    }
+  </script>
+</body>
+</html>

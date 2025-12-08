@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Policies</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --txt:#eef2ff; --muted:#9aa4b2; --bg:#0b0e18;
+      --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 45%,#06b6d4 100%);
+      --radius:18px; --shadow:0 20px 45px rgba(17,24,39,.45);
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 12% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+    }
+
+    /* Ambient blobs */
+    .scene{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+    .orb{position:absolute;filter:blur(32px);opacity:.28;mix-blend-mode:screen;background:var(--grad);border-radius:999px;animation:float 18s ease-in-out infinite}
+    .orb.o1{width:520px;height:520px;left:-120px;top:-140px}
+    .orb.o2{width:420px;height:420px;right:-140px;top:10%;animation-delay:3s}
+    .orb.o3{width:480px;height:480px;left:22%;bottom:-160px;animation-delay:6s}
+    @keyframes float{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-40px,0)}100%{transform:translate3d(0,0,0)}}
+
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+
+    .section{ padding:76px 0 }
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{ color:var(--muted)!important }
+
+    .card-elevated{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.94));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius); box-shadow:0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, border-color .25s ease;
+    }
+    .card-elevated:hover{ transform:translateY(-4px); border-color:rgba(124,58,237,.30) }
+
+    .topic-pill{
+      display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .8rem;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.06); cursor:pointer; user-select:none
+    }
+    .topic-pill.active{ box-shadow:0 0 0 2px rgba(124,58,237,.35) inset }
+
+    /* Vertical timeline for "Policy updates" */
+    .timeline{position:relative;padding-left:68px}
+    .timeline::before{content:"";position:absolute;left:32px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.14)}
+    .t-item{position:relative;margin-bottom:26px}
+    .t-item::before{content:"";position:absolute;left:24px;top:.45rem;width:16px;height:16px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 4px rgba(124,58,237,.18)}
+    .t-item:last-child{margin-bottom:0}
+
+    .badge-soft{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:.15rem .5rem}
+
+    /* Back-to-top */
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    @media (max-width:576px){ .section{ padding:56px 0 } .timeline{padding-left:56px} .timeline::before{left:28px} .t-item::before{left:20px} }
+  </style>
+</head>
+<body>
+  <!-- ambience -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="52" class="me-2">
+        <span style="font-size:1.1em;">Roots</span><span style="font-size:1.4em;font-weight:800;">&</span><span style="font-size:1.1em;">Crafts</span>
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="band section">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-8" data-aos="fade-right">
+          <div class="section-title mb-2">
+            <span class="dot"></span><h1 class="fw-bold mb-0">Policies</h1>
+          </div>
+          <p class="lead-muted">Here’s how we keep your experience safe, respectful, and transparent. This is a <span class="badge-soft">demo site</span>—no real transactions occur.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="topic-pill active" data-scroll="#terms"><i class="bi bi-file-earmark-text"></i> Terms</span>
+            <span class="topic-pill" data-scroll="#privacy"><i class="bi bi-shield-lock"></i> Privacy</span>
+            <span class="topic-pill" data-scroll="#community"><i class="bi bi-people"></i> Community</span>
+            <span class="topic-pill" data-scroll="#returns"><i class="bi bi-arrow-counterclockwise"></i> Returns</span>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card-elevated p-4">
+            <h6 class="fw-semibold"><i class="bi bi-headset me-1"></i> Need help?</h6>
+            <p class="small lead-muted mb-2">We respond within 24 business hours.</p>
+            <a href="contact.html" class="btn btn-primary btn-sm">Contact Support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TERMS -->
+  <section class="section pt-0" id="terms">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-7" data-aos="fade-up">
+          <div class="card-elevated p-4">
+            <h5 class="fw-bold">Terms & Conditions (Demo)</h5>
+            <ul class="small lead-muted mb-0 ps-3">
+              <li>This is a demonstration site for a competition—no payments, shipping, or real orders happen.</li>
+              <li>Content and products are placeholders to showcase UI/UX only.</li>
+              <li>By using this site you agree not to upload harmful, illegal, or infringing content.</li>
+              <li>We may change or remove content at any time during the demo period.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-5" data-aos="fade-up" data-aos-delay="80">
+          <div class="card-elevated p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-lightning-charge"></i> Quick summary</h6>
+            <p class="small lead-muted mb-1">No real commerce. Portfolio-only.</p>
+            <p class="small lead-muted mb-0">Use respectfully. Don’t misuse assets or brand.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="section" id="privacy">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-8" data-aos="fade-up">
+          <div class="card-elevated p-4">
+            <h5 class="fw-bold">Privacy</h5>
+            <p class="small lead-muted">We do not collect or store personal data on this demo. If you type information into forms, it is not persisted to any database.</p>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="card-elevated p-3">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-shield-check"></i><h6 class="fw-semibold mb-0">What we don’t store</h6>
+                  </div>
+                  <ul class="small lead-muted ps-3 mb-0 mt-2">
+                    <li>Emails / passwords</li>
+                    <li>Payment or address data</li>
+                    <li>Analytics tied to identity</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card-elevated p-3 h-100">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-incognito"></i><h6 class="fw-semibold mb-0">Demo safety</h6>
+                  </div>
+                  <p class="small lead-muted mb-0 mt-2">Inputs are either mocked or cleared on refresh. Assets are for preview only.</p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 small">Questions? <a href="contact.html">Ask us</a>.</div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card-elevated p-4 h-100">
+            <h6 class="fw-semibold"><i class="bi bi-person-vcard me-1"></i> Data Requests</h6>
+            <p class="small lead-muted">Because we don’t store PII on this demo, data-access and deletion requests are not applicable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY + RETURNS -->
+  <section class="section" id="community">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6" data-aos="fade-up">
+          <div class="card-elevated p-4 h-100">
+            <h5 class="fw-bold">Community Guidelines</h5>
+            <ul class="small lead-muted ps-3 mb-0">
+              <li>Be respectful. Celebrate culture. Credit sources.</li>
+              <li>No hate speech, harassment, or discriminatory content.</li>
+              <li>Keep feedback constructive—help makers grow.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6" id="returns" data-aos="fade-up" data-aos-delay="80">
+          <div class="card-elevated p-4 h-100">
+            <h5 class="fw-bold">Returns & Shipping (Demo)</h5>
+            <p class="small lead-muted mb-0">There are no real shipments or returns. The flow demonstrates how the UI would work in production.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POLICY UPDATES TIMELINE -->
+  <section class="section band">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h4 class="mb-0 fw-semibold">Policy updates</h4></div>
+      <div class="card-elevated p-4">
+        <div class="timeline">
+          <div class="t-item" data-aos="fade-up">
+            <h6 class="fw-semibold mb-1">2025-12-01 — Initial draft</h6>
+            <p class="small lead-muted mb-0">Published Terms, Privacy, Community, and Returns (demo) for launch.</p>
+          </div>
+          <div class="t-item" data-aos="fade-up" data-aos-delay="60">
+            <h6 class="fw-semibold mb-1">2025-12-05 — Clarified Privacy</h6>
+            <p class="small lead-muted mb-0">Explicitly stated that form inputs are not persisted on the demo.</p>
+          </div>
+          <div class="t-item" data-aos="fade-up" data-aos-delay="120">
+            <h6 class="fw-semibold mb-1">2025-12-08 — Accessibility pass</h6>
+            <p class="small lead-muted mb-0">Improved color contrast and semantic structure across policy pages.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-8" data-aos="fade-up">
+          <div class="section-title mb-2"><span class="dot"></span><h4 class="mb-0 fw-semibold">Common questions</h4></div>
+          <div class="accordion" id="polFaq">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                  Is this a real store?
+                </button>
+              </h2>
+              <div id="f1" class="accordion-collapse collapse" data-bs-parent="#polFaq">
+                <div class="accordion-body small">No—this is a portfolio demo. Flows such as cart and checkout are illustrative.</div>
+              </div>
+            </div>
+            <div class="accordion-item mt-2">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                  Do you keep my email if I subscribe?
+                </button>
+              </h2>
+              <div id="f2" class="accordion-collapse collapse" data-bs-parent="#polFaq">
+                <div class="accordion-body small">Subscription inputs are mocked in the demo—no messages are sent and nothing is stored.</div>
+              </div>
+            </div>
+            <div class="accordion-item mt-2">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                  Can I reuse this policy text?
+                </button>
+              </h2>
+              <div id="f3" class="accordion-collapse collapse" data-bs-parent="#polFaq">
+                <div class="accordion-body small">Yes, as a starting point—adapt for your legal needs and consult counsel for production use.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card-elevated p-4 h-100 text-center">
+            <h6 class="fw-semibold">Still unsure?</h6>
+            <p class="small lead-muted">We’ll happily clarify any section.</p>
+            <a class="btn btn-outline-secondary me-2" href="faq.html">Help & FAQ</a>
+            <a class="btn btn-primary" href="contact.html">Contact</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block">4,200+</span><span class="small text-secondary">Readers</span></div>
+            <div><span class="h4 mb-0 d-block">980+</span><span class="small text-secondary">Saves</span></div>
+            <div><span class="h4 mb-0 d-block">310</span><span class="small text-secondary">Shares</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up-short fs-4"></i></button>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Smooth scroll for topic pills
+    document.querySelectorAll('.topic-pill').forEach(p=>{
+      p.addEventListener('click', ()=>{
+        document.querySelectorAll('.topic-pill').forEach(x=>x.classList.remove('active'));
+        p.classList.add('active');
+        const sel = p.getAttribute('data-scroll');
+        if(sel){ document.querySelector(sel)?.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+
+    // Back-to-top
+    const backTop = document.getElementById('backToTop');
+    document.addEventListener('scroll', () => {
+      document.documentElement.scrollTop > 240 ? backTop.classList.add('show') : backTop.classList.remove('show');
+    }, { passive:true });
+    backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+  </script>
+</body>
+</html>

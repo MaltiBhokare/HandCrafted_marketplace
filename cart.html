@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Cart</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <style>
+    :root{ --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 45%,#06b6d4 100%); --muted:#9aa4b2; --radius:18px; }
+    body{
+      background:
+        radial-gradient(1200px 700px at 12% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        #0b0e18;
+    }
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .section{ padding:72px 0; }
+    .section-title{ display:flex; align-items:center; gap:.6rem }
+    .section-title .dot{ width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa) }
+
+    .card-elevated{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.94));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow:0 20px 45px rgba(17,24,39,.35);
+    }
+
+    /* Free shipping progress */
+    .progress-wrap{ background:rgba(255,255,255,.06); border-radius:999px; overflow:hidden }
+    .progress-wrap .bar{ height:10px; background:var(--grad); width:0 }
+
+    /* Sticky summary on desktop */
+    @media (min-width: 992px){
+      .summary-sticky{ position: sticky; top:90px }
+    }
+
+    .mini-img{ width:64px; height:64px; object-fit:cover; border-radius:10px; }
+
+    /* Swiper product cards */
+    .prod-card{ border:1px solid rgba(255,255,255,.06); border-radius:16px; overflow:hidden }
+    .prod-card img{ height:160px; object-fit:cover; width:100% }
+    .prod-card .p-3{ background:rgba(255,255,255,.02) }
+
+    /* Trust badges */
+    .badges i{ font-size:1.3rem; }
+    .muted{ color:var(--muted) }
+
+    /* Back-to-top button */
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:0 16px 35px rgba(0,0,0,.35); opacity:0; visibility:hidden; transform:translateY(6px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+        <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="48" class="me-2">
+        <span class="me-1" style="font-size:1.1em;">Roots</span>
+        <span class="fw-bolder" style="font-size:1.4em;">&</span>
+        <span style="font-size:1.1em;">Crafts</span>
+      </a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER BAND -->
+  <header class="section">
+    <div class="container">
+      <div class="section-title mb-3">
+        <span class="dot"></span><h2 class="mb-0 fw-bold">Your Cart</h2>
+      </div>
+
+      <!-- Free shipping bar -->
+      <div class="card-elevated p-3 p-md-4" data-aos="fade-up">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="mb-2 mb-md-0"><i class="bi bi-truck"></i> <strong>Free shipping</strong> on orders over ₹1,999</div>
+          <div class="small muted"><span id="fsLeft">₹1,300</span> left to unlock</div>
+        </div>
+        <div class="progress-wrap mt-2">
+          <div class="bar" id="fsBar"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CART + SUMMARY -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Cart table -->
+        <div class="col-lg-8" data-aos="fade-right">
+          <div class="card-elevated p-2 p-md-3">
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th style="min-width:280px">Item</th>
+                    <th>Price</th>
+                    <th class="text-center">Qty</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="cartBody">
+                  <tr data-id="1">
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <img src="assets/img/placeholder2.svg" class="mini-img" alt="">
+                        <div>
+                          <div class="fw-semibold">Terracotta Mug</div>
+                          <div class="small muted">Hand-thrown • 320ml</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>₹699</td>
+                    <td class="text-center" style="max-width:110px">
+                      <div class="input-group input-group-sm">
+                        <button class="btn btn-outline-secondary qty-dec" type="button">-</button>
+                        <input type="number" class="form-control text-center qty" value="1" min="1">
+                        <button class="btn btn-outline-secondary qty-inc" type="button">+</button>
+                      </div>
+                    </td>
+                    <td class="row-total">₹699</td>
+                    <td><button class="btn btn-sm btn-outline-danger remove"><i class="bi bi-x"></i></button></td>
+                  </tr>
+
+                  <tr data-id="2">
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <img src="assets/img/placeholder1.svg" class="mini-img" alt="">
+                        <div>
+                          <div class="fw-semibold">Indigo Dyed Napkin (Set of 2)</div>
+                          <div class="small muted">100% cotton • 45×45cm</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>₹499</td>
+                    <td class="text-center">
+                      <div class="input-group input-group-sm">
+                        <button class="btn btn-outline-secondary qty-dec" type="button">-</button>
+                        <input type="number" class="form-control text-center qty" value="1" min="1">
+                        <button class="btn btn-outline-secondary qty-inc" type="button">+</button>
+                      </div>
+                    </td>
+                    <td class="row-total">₹499</td>
+                    <td><button class="btn btn-sm btn-outline-danger remove"><i class="bi bi-x"></i></button></td>
+                  </tr>
+
+                  <tr data-id="3">
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <img src="assets/img/placeholder3.svg" class="mini-img" alt="">
+                        <div>
+                          <div class="fw-semibold">Coconut Shell Spoon</div>
+                          <div class="small muted">Upcycled • 18cm</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>₹199</td>
+                    <td class="text-center">
+                      <div class="input-group input-group-sm">
+                        <button class="btn btn-outline-secondary qty-dec" type="button">-</button>
+                        <input type="number" class="form-control text-center qty" value="2" min="1">
+                        <button class="btn btn-outline-secondary qty-inc" type="button">+</button>
+                      </div>
+                    </td>
+                    <td class="row-total">₹398</td>
+                    <td><button class="btn btn-sm btn-outline-danger remove"><i class="bi bi-x"></i></button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Coupon + Notes -->
+            <div class="row g-3 mt-3">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-ticket"></i></span>
+                  <input id="coupon" class="form-control" placeholder="Apply coupon (e.g., CRAFT10)">
+                  <button class="btn btn-outline-primary" id="applyCoupon">Apply</button>
+                </div>
+                <div class="small mt-2 muted">Popular: <span class="badge text-bg-secondary">CRAFT10</span> <span class="badge text-bg-secondary">WELCOME5</span></div>
+              </div>
+              <div class="col-md-6">
+                <input class="form-control" placeholder="Order note (gift message, delivery instructions)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order summary -->
+        <div class="col-lg-4" data-aos="fade-left">
+          <div class="card-elevated p-3 p-md-4 summary-sticky">
+            <h5 class="fw-bold mb-3">Order Summary</h5>
+            <div class="d-flex justify-content-between"><span>Subtotal</span><strong id="subTot">₹0</strong></div>
+            <div class="d-flex justify-content-between"><span>Discount</span><strong class="text-success" id="disc">- ₹0</strong></div>
+            <div class="d-flex justify-content-between"><span>Shipping</span><strong id="ship">₹80</strong></div>
+            <div class="d-flex justify-content-between"><span>GST (5%)</span><strong id="tax">₹0</strong></div>
+            <hr>
+            <div class="d-flex justify-content-between fs-5"><span>Total</span><strong id="grand">₹0</strong></div>
+            <button class="btn btn-primary w-100 mt-3"><i class="bi bi-lock-fill me-1"></i> Checkout (Coming Soon)</button>
+            <div class="text-center small mt-2 muted"><i class="bi bi-shield-check me-1"></i>Secure checkout • UPI / Cards / NetBanking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust badges -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="card-elevated p-4 p-md-5 text-center badges" data-aos="zoom-in">
+        <div class="row g-4">
+          <div class="col-6 col-md-3"><i class="bi bi-patch-check-fill"></i><div class="fw-semibold mt-1">Authentic Crafts</div><div class="small muted">Verified artisan partners</div></div>
+          <div class="col-6 col-md-3"><i class="bi bi-recycle"></i><div class="fw-semibold mt-1">Sustainable</div><div class="small muted">Low-waste materials</div></div>
+          <div class="col-6 col-md-3"><i class="bi bi-truck"></i><div class="fw-semibold mt-1">Tracked Shipping</div><div class="small muted">All over India</div></div>
+          <div class="col-6 col-md-3"><i class="bi bi-arrow-repeat"></i><div class="fw-semibold mt-1">Easy Returns</div><div class="small muted">7-day support</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- You may also like -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h4 class="mb-0 fw-semibold">You may also like</h4></div>
+        <span class="small muted">Swipe →</span>
+      </div>
+      <div class="swiper" id="likeSwiper" data-aos="fade-up">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="prod-card">
+              <img src="assets/img/d4.jpg" alt="">
+              <div class="p-3">
+                <div class="fw-semibold">Clay Aroma Diffuser</div>
+                <div class="small muted">₹649</div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="prod-card">
+              <img src="assets/img/d3.jpg" alt="">
+              <div class="p-3">
+                <div class="fw-semibold">Handloom Table Runner</div>
+                <div class="small muted">₹899</div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="prod-card">
+              <img src="assets/img/d2.jpg" alt="">
+              <div class="p-3">
+                <div class="fw-semibold">Cane Coaster Set</div>
+                <div class="small muted">₹399</div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="prod-card">
+              <img src="assets/img/d1.jpg" alt="">
+              <div class="p-3">
+                <div class="fw-semibold">Block-Printed Pouch</div>
+                <div class="small muted">₹549</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h4 class="mb-0 fw-semibold">Cart & Shipping FAQ</h4></div>
+      <div class="row g-4">
+        <div class="col-lg-8" data-aos="fade-up">
+          <div class="accordion" id="faq">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">How is shipping calculated?</button>
+              </h2>
+              <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faq">
+                <div class="accordion-body">Flat ₹80 across India. Free above ₹1,999. Some fragile items may include extra packing cost—shown at checkout.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">Can I edit my order later?</button>
+              </h2>
+              <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body">Yes, within 2 hours of placing the order. Contact us with your order ID and we’ll update it if it hasn’t shipped.</div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">Do you offer gift notes?</button>
+              </h2>
+              <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faq">
+                <div class="accordion-body">Absolutely. Add your message in “Order note” above—we’ll print it on a recycled card.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card-elevated p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-envelope me-1"></i> Price drop alerts</h6>
+            <p class="small muted">Get notified if items in your cart go on sale.</p>
+            <div class="input-group">
+              <input class="form-control" placeholder="Email address">
+              <button class="btn btn-primary">Notify me</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="card-elevated p-4 p-md-5 text-center" data-aos="fade-up">
+        <h5 class="fw-bold">Stories, launches & workshops</h5>
+        <p class="muted">We send 1 thoughtful email a month—no spam.</p>
+        <div class="row g-2 justify-content-center">
+          <div class="col-md-5"><input class="form-control" placeholder="Your email"></div>
+          <div class="col-md-2 d-grid"><button class="btn btn-primary">Subscribe</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            <div><span class="h4 mb-0 d-block" id="countProducts">0</span><span class="small text-secondary">Products</span></div>
+            <div><span class="h4 mb-0 d-block" id="countWorkshops">0</span><span class="small text-secondary">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up-short fs-4"></i></button>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    // AOS init
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Back to top
+    const backTop = document.getElementById('backToTop');
+    document.addEventListener('scroll', () => {
+      document.documentElement.scrollTop > 240 ? backTop.classList.add('show') : backTop.classList.remove('show');
+    }, {passive:true});
+    backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // Swiper
+    if (window.Swiper) {
+      new Swiper('#likeSwiper', {
+        slidesPerView: 1.2, spaceBetween: 14, loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3}, 1200:{slidesPerView:4} }
+      });
+    }
+
+    // Cart math
+    const SHIPPING_THRESHOLD = 1999;
+    const BASE_SHIP = 80;
+    const GST = 0.05;
+    let couponValue = 0;
+
+    function parseRupee(str){ return Number(String(str).replace(/[₹,\s]/g,''))||0; }
+    function formatRupee(n){ return '₹' + n.toLocaleString('en-IN'); }
+
+    function recalc(){
+      // row totals
+      document.querySelectorAll('#cartBody tr').forEach(row=>{
+        const price = parseRupee(row.children[1].textContent);
+        const qty = Number(row.querySelector('.qty').value) || 1;
+        row.querySelector('.row-total').textContent = formatRupee(price * qty);
+      });
+
+      // subtotal
+      let sub = 0;
+      document.querySelectorAll('.row-total').forEach(c=> sub += parseRupee(c.textContent));
+      document.getElementById('subTot').textContent = formatRupee(sub);
+
+      // discount (couponValue is %)
+      const discountAmt = Math.round(sub * couponValue);
+      document.getElementById('disc').textContent = '- ' + formatRupee(discountAmt);
+
+      // shipping & free-shipping progress
+      const ship = sub - discountAmt >= SHIPPING_THRESHOLD ? 0 : BASE_SHIP;
+      document.getElementById('ship').textContent = formatRupee(ship);
+
+      const remaining = Math.max(0, SHIPPING_THRESHOLD - (sub - discountAmt));
+      document.getElementById('fsLeft').textContent = formatRupee(remaining) + (remaining === 0 ? ' unlocked!' : ' left to unlock');
+      const pct = Math.min(100, Math.round(((sub - discountAmt)/SHIPPING_THRESHOLD)*100));
+      document.getElementById('fsBar').style.width = pct + '%';
+
+      // tax + total
+      const taxable = Math.max(0, sub - discountAmt);
+      const tax = Math.round(taxable * GST);
+      document.getElementById('tax').textContent = formatRupee(tax);
+
+      const grand = taxable + ship + tax;
+      document.getElementById('grand').textContent = formatRupee(grand);
+    }
+
+    // qty buttons
+    document.getElementById('cartBody').addEventListener('click', (e)=>{
+      const row = e.target.closest('tr');
+      if (!row) return;
+      if (e.target.closest('.qty-inc')) { const i=row.querySelector('.qty'); i.value = Number(i.value||1)+1; recalc(); }
+      if (e.target.closest('.qty-dec')) { const i=row.querySelector('.qty'); i.value = Math.max(1, Number(i.value||1)-1); recalc(); }
+      if (e.target.closest('.remove')) { row.remove(); recalc(); }
+    });
+    document.getElementById('cartBody').addEventListener('input', (e)=>{
+      if (e.target.classList.contains('qty')) recalc();
+    });
+
+    // coupon
+    document.getElementById('applyCoupon').addEventListener('click', ()=>{
+      const code = (document.getElementById('coupon').value||'').trim().toUpperCase();
+      if (!code) { couponValue = 0; recalc(); return; }
+      if (code === 'CRAFT10') couponValue = 0.10;
+      else if (code === 'WELCOME5') couponValue = 0.05;
+      else couponValue = 0;
+      recalc();
+    });
+
+    // initial
+    recalc();
+  </script>
+</body>
+</html>

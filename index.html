@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Home</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <!-- Enhanced Theme Styles (colorful + animated) -->
+  <style>
+    :root{
+      --bg-1:#0e0f12;
+      --bg-2:#10131a;
+      --card:#151924;
+      --muted:#9aa4b2;
+      --txt:#eef2ff;
+
+      /* Accent gradient */
+      --grad: linear-gradient(135deg, #7c3aed 0%, #2563eb 45%, #06b6d4 100%);
+      --grad-soft: linear-gradient(135deg, rgba(124,58,237,.18), rgba(37,99,235,.18) 45%, rgba(6,182,212,.18));
+      --ring: 0 0 0 6px rgba(124,58,237,.15), inset 0 0 0 1px rgba(255,255,255,.06);
+      --shadow: 0 20px 45px rgba(17,24,39,.45);
+      --radius: 18px;
+    }
+
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg-1);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Floating gradient orbs (decor) */
+    .scene{
+      position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden;
+    }
+    .orb{
+      position:absolute; filter:blur(32px); opacity:.27; mix-blend-mode:screen;
+      background:var(--grad); border-radius:999px;
+      animation: float 18s ease-in-out infinite;
+      will-change: transform;
+    }
+    .orb.o1{width:520px;height:520px; left:-120px; top:-120px; animation-delay:0s}
+    .orb.o2{width:420px;height:420px; right:-120px; top:10%; animation-delay:3s}
+    .orb.o3{width:480px;height:480px; left:20%; bottom:-140px; animation-delay:6s}
+    @keyframes float{
+      0%{ transform:translate3d(0,0,0) }
+      50%{ transform:translate3d(0,-40px,0) }
+      100%{ transform:translate3d(0,0,0) }
+    }
+
+    /* Sections */
+    .section{padding:70px 0}
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+
+    .lead-muted{color:var(--muted)!important}
+
+    /* Glassy Navbar with gradient underline */
+    .navbar{
+      background:rgba(10,12,19,.55)!important;
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .navbar .nav-link{
+      position:relative; color:#e5e7eb!important; opacity:.9;
+    }
+    .navbar .nav-link.active, .navbar .nav-link:hover{opacity:1}
+    .navbar .nav-link::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background:var(--grad); border-radius:999px; transform:scaleX(0);
+      transform-origin:center; transition:transform .25s ease;
+    }
+    .navbar .nav-link:hover::after, .navbar .nav-link.active::after{transform:scaleX(1)}
+    .btn-outline-secondary,.btn-outline-primary{border-color:#94a3b8; color:#e5e7eb}
+    .btn-outline-secondary:hover,.btn-outline-primary:hover{background:var(--grad); border-color:transparent}
+/* HERO VIDEO */
+.hero {
+  min-height: 70vh;
+  position: relative;
+  background: #000;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75) contrast(1.05) saturate(1.15);
+  z-index: 1;
+}
+
+/* Gradient overlay on video */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      to bottom,
+      rgba(10,12,19,.10),
+      rgba(10,12,19,.80)
+  );
+  z-index: 2;
+}
+
+/* Hero text on top of overlay */
+.hero > .position-absolute {
+  z-index: 3 !important;
+}
+
+
+    /* Inputs & primary button */
+    .form-control{background:#0f1220; color:#eaf0ff; border:1px solid rgba(255,255,255,.08)}
+    .form-control::placeholder{color:#97a0b8}
+    .btn-primary{
+      background:var(--grad); border:0; box-shadow:var(--shadow);
+    }
+    .btn-primary:hover{filter:brightness(1.05)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.92));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow: 0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .card:hover{transform:translateY(-4px); border-color:rgba(124,58,237,.35)}
+    .card-img-top{filter:grayscale(10%) saturate(1.05) contrast(1.05); transition:transform .35s ease}
+    .card:hover .card-img-top{transform:scale(1.03)}
+
+    .category-tile{overflow:hidden}
+    .category-tile::before{
+      content:""; position:absolute; inset:0; border-radius:inherit;
+      box-shadow:var(--ring); opacity:0; transition:opacity .28s ease;
+    }
+    .category-tile:hover::before{opacity:1}
+
+    /* Featured band */
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    /* Scroll progress & Back-to-top */
+    #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    footer{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    @media (max-width:576px){
+      .hero .input-group{width:100%!important}
+    }
+  </style>
+</head>
+<body>
+  <!-- floating gradient orbs -->
+  <div class="scene">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+  </div>
+
+  <!-- scroll progress -->
+  <div id="scrollProgress"></div>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <!-- <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-flower2 me-1"></i> Local Artisans
+      </a> -->
+       <a class="navbar-brand fw-bold" href="index.html">
+  <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="100" class="me-2">
+  <span style="font-size: 1.2em;">Roots</span>
+  <span style="font-size: 2em; font-weight: bolder;">&</span>
+  <span style="font-size: 1.2em;">Crafts</span>
+</a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+<header class="hero position-relative overflow-hidden">
+  
+  <!-- 🔥 Background Video -->
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="assets/video/hero.mp4" type="video/mp4">
+  </video>
+
+  <!-- Dark gradient overlay -->
+  <div class="hero-overlay"></div>
+
+  <!-- Hero Content -->
+  <div class="position-absolute top-50 start-50 translate-middle text-center text-light">
+    <span class="badge rounded-pill badge-tag px-3 py-2 mb-3">
+      Support local • Fair craft • Cultural impact
+    </span>
+
+    <h1 class="display-5 fw-bold lh-1" data-aos="fade-up">
+      Discover Handcrafted Treasures
+    </h1>
+
+    <p class="lead mb-4" data-aos="fade-up" data-aos-delay="100">
+      Shop local. Support artisans. Celebrate culture.
+    </p>
+
+    <div class="input-group w-75 mx-auto" data-aos="zoom-in" data-aos-delay="200">
+      <input id="heroSearchInput" class="form-control form-control-lg"
+             placeholder="Search products, artists, workshops...">
+      <button id="heroSearchBtn" class="btn btn-lg btn-primary">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+
+<section class="container py-5">
+  <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Explore Categories</h2></div>
+  <div class="row g-3">
+    <div class="col-6 col-md-3" data-aos="fade-up">
+      <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=pottery">
+        <img src="assets/img/p1.jpg" class="card-img-top" alt="Pottery">
+        <div class="card-body text-center"><span class="fw-semibold">Pottery</span></div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="50">
+      <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=textiles">
+        <img src="assets/img/aa (5).jpg" class="card-img-top" alt="Textiles">
+        <div class="card-body text-center"><span class="fw-semibold">Textiles</span></div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100">
+      <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=woodwork">
+        <img src="assets/img/w1.jpg" class="card-img-top" alt="Woodwork">
+        <div class="card-body text-center"><span class="fw-semibold">Woodwork</span></div>
+      </a>
+    </div>
+    <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="150">
+      <a class="card category-tile text-decoration-none shadow-sm" href="products.html?cat=metal">
+        <img src="assets/img/m2.jpg" class="card-img-top" alt="Metal">
+        <div class="card-body text-center"><span class="fw-semibold">Metal</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="band py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="section-title mb-0"><span class="dot"></span><h2 class="mb-0 fw-bold">Featured Artists</h2></div>
+      <a href="artists.html" class="btn btn-outline-secondary btn-sm">See all</a>
+    </div>
+    <div class="swiper" id="artistSwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="card h-100 shadow-sm">
+            <img src="assets/img/name.png" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title mb-1">Anaya Ceramics</h5>
+              <p class="small lead-muted mb-2">Kutch, Gujarat</p>
+              <a href="artists.html#anaya" class="stretched-link">View profile</a>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="card h-100 shadow-sm">
+            <img src="assets/img/name2.png" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title mb-1">Meera Textiles</h5>
+              <p class="small lead-muted mb-2">Bhuj, Gujarat</p>
+              <a href="artists.html#meera" class="stretched-link">View profile</a>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="card h-100 shadow-sm">
+            <img src="assets/img/name3.png" class="card-img-top" alt="">
+            <div class="card-body">
+              <h5 class="card-title mb-1">Om Woodworks</h5>
+              <p class="small lead-muted mb-2">Saharanpur, UP</p>
+              <a href="artists.html#omwood" class="stretched-link">View profile</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Cultural Stories</h2></div>
+  <div class="row g-4">
+    <div class="col-md-4" data-aos="fade-up">
+      <article class="card h-100 shadow-sm">
+        <img src="assets/img/h1.png" class="card-img-top" alt="">
+        <div class="card-body">
+          <h5 class="card-title">The Journey of Ajrakh</h5>
+          <p class="small lead-muted">Natural dyes, ancient blocks, living heritage.</p>
+          <a href="stories.html#ajrakh" class="stretched-link">Read story</a>
+        </div>
+      </article>
+    </div>
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="50">
+      <article class="card h-100 shadow-sm">
+        <img src="assets/img/h2.png" class="card-img-top" alt="">
+        <div class="card-body">
+          <h5 class="card-title">Dhokra Metal Casting</h5>
+          <p class="small lead-muted">Lost-wax tradition from central India.</p>
+          <a href="stories.html#dhokra" class="stretched-link">Read story</a>
+        </div>
+      </article>
+    </div>
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+      <article class="card h-100 shadow-sm">
+        <img src="assets/img/h4.png" class="card-img-top" alt="">
+        <div class="card-body">
+          <h5 class="card-title">Blue Pottery of Jaipur</h5>
+          <p class="small lead-muted">Quartz-based glaze and vibrant motifs.</p>
+          <a href="stories.html#bluepottery" class="stretched-link">Read story</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small lead-muted">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            <div><span class="h4 mb-0 d-block" id="countProducts">0</span><span class="small text-secondary">Products</span></div>
+            <div><span class="h4 mb-0 d-block" id="countWorkshops">0</span><span class="small text-secondary">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <i class="bi bi-arrow-up-short fs-4"></i>
+  </button>
+
+  <!-- Core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- Page Behaviors -->
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Swiper
+    if (window.Swiper && document.querySelector('#artistSwiper')) {
+      new Swiper('#artistSwiper', {
+        slidesPerView: 1, spaceBetween: 18, loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3} }
+      });
+    }
+
+    // Lightbox (if you later wrap images with anchors)
+    if (window.GLightbox) GLightbox({ selector: '.glightbox', touchNavigation: true });
+
+    // GSAP parallax on hero image
+    if (window.gsap && window.ScrollTrigger && document.querySelector('.hero-img')) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.to('.hero-img', {
+        scale: 1.08, y: 60, ease: 'power1.out',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+      });
+    }
+
+    // Working search routing
+    const sInput = document.getElementById('heroSearchInput');
+    const sBtn   = document.getElementById('heroSearchBtn');
+    const goSearch = () => {
+      const q = (sInput?.value || '').trim();
+      if (q) window.location.href = 'products.html?search=' + encodeURIComponent(q);
+    };
+    sBtn && sBtn.addEventListener('click', goSearch);
+    sInput && sInput.addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
+
+    // Active nav highlight
+    const path = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      const href = a.getAttribute('href');
+      if (href && href.indexOf(path) !== -1) a.classList.add('active');
+    });
+
+    // Scroll progress + back to top
+    const progressEl = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backToTop');
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / ((h.scrollHeight - h.clientHeight) || 1) * 100;
+      if (progressEl) progressEl.style.width = scrolled + '%';
+      if (backTop){
+        if (h.scrollTop > 240) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+      }
+    };
+    document.addEventListener('scroll', onScroll, { passive:true });
+    backTop && backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // CountUp footer KPIs (fires once on view)
+    const counters = [
+      { id:'countArtisans', end:120, suffix:'+' },
+      { id:'countProducts', end:540, suffix:'+' },
+      { id:'countWorkshops', end:28,  suffix:'' }
+    ];
+    const startCounters = () => {
+      if (!window.CountUp) return;
+      counters.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.6, suffix:c.suffix });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    };
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if (e.isIntersecting) startCounters(); });
+    }, {threshold:.4});
+    document.querySelectorAll('#countArtisans, #countProducts, #countWorkshops').forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>
+
+<!-- Keep these extra sections where they are if you intend to paste them elsewhere later -->
+<section class="section">
+  <div class="container">
+    <div class="row text-center g-4">
+      <div class="col-6 col-md-3" data-aos="fade-up"><h2 class="display-6 fw-bold">120+</h2><div class="lead-muted">Artisans</div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="50"><h2 class="display-6 fw-bold">540+</h2><div class="lead-muted">Products</div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100"><h2 class="display-6 fw-bold">28</h2><div class="lead-muted">Workshops</div></div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="150"><h2 class="display-6 fw-bold">12</h2><div class="lead-muted">Regions</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><span class="dot"></span><h2 class="mb-0 fw-bold">How it’s made (Process)</h2></div>
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up">
+        <div class="card p-4 h-100">
+          <h5 class="fw-bold">1. Sourcing</h5>
+          <p class="lead-muted">Natural clay, fibers, metals sourced locally to reduce footprint.</p>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="70">
+        <div class="card p-4 h-100">
+          <h5 class="fw-bold">2. Crafting</h5>
+          <p class="lead-muted">Traditional tools & techniques passed down through generations.</p>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="140">
+        <div class="card p-4 h-100">
+          <h5 class="fw-bold">3. Finishing</h5>
+          <p class="lead-muted">Firing, dyeing, polishing — every detail by hand.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><span class="dot"></span><h2 class="mb-0 fw-bold">What buyers say</h2></div>
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up">
+        <div class="card p-4 h-100"><p>“Museum-quality pottery. You can see the love in every curve.”</p><div class="lead-muted">— Aditi, Pune</div></div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="70">
+        <div class="card p-4 h-100"><p>“The Ajrakh scarf feels timeless — my favorite piece this year.”</p><div class="lead-muted">— Rohan, Ahmedabad</div></div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="140">
+        <div class="card p-4 h-100"><p>“Workshops are friendly and inspiring. Learned so much!”</p><div class="lead-muted">— Sana, Mumbai</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><span class="dot"></span><h2 class="mb-0 fw-bold">Our partners</h2></div>
+    <div class="card p-4">
+      <div class="d-flex flex-wrap justify-content-around gap-4">
+        <span class="lead-muted">• CultureFund</span>
+        <span class="lead-muted">• CraftCollective</span>
+        <span class="lead-muted">• ArtHouse</span>
+        <span class="lead-muted">• HeritageLab</span>
+        <span class="lead-muted">• MakersGuild</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="card p-5 text-center">
+      <h3 class="fw-bold mb-2">Get stories & workshop alerts</h3>
+      <p class="lead-muted mb-4">No spam. Only inspiring craft in your inbox.</p>
+      <div class="row g-2 justify-content-center">
+        <div class="col-sm-7"><input class="form-control form-control-lg" placeholder="Email address"></div>
+        <div class="col-sm-3 d-grid"><button class="btn btn-primary btn-lg">Subscribe</button></div>
+      </div>
+    </div>
+  </div>
+</section>

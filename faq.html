@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Help & FAQ</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --txt:#eef2ff; --muted:#9aa4b2; --bg:#0b0e18;
+      --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 45%,#06b6d4 100%);
+      --radius:18px; --shadow:0 20px 45px rgba(17,24,39,.45);
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 12% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+    }
+
+    /* Ambient blobs */
+    .scene{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+    .orb{position:absolute;filter:blur(32px);opacity:.28;mix-blend-mode:screen;background:var(--grad);border-radius:999px;animation:float 18s ease-in-out infinite}
+    .orb.o1{width:520px;height:520px;left:-120px;top:-140px}
+    .orb.o2{width:420px;height:420px;right:-140px;top:10%;animation-delay:3s}
+    .orb.o3{width:480px;height:480px;left:22%;bottom:-160px;animation-delay:6s}
+    @keyframes float{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-40px,0)}100%{transform:translate3d(0,0,0)}}
+
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+
+    .section{ padding:76px 0 }
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{ color:var(--muted)!important }
+
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .card-elevated{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.94));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius); box-shadow:0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, border-color .25s ease;
+    }
+    .card-elevated:hover{ transform:translateY(-4px); border-color:rgba(124,58,237,.30) }
+
+    /* Topic pills */
+    .topic-pill{
+      display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .8rem;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.06); cursor:pointer; user-select:none
+    }
+    .topic-pill.active{ box-shadow:0 0 0 2px rgba(124,58,237,.35) inset }
+
+    /* Accordion theme */
+    .faq-accordion .accordion-item{ border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden; background:rgba(255,255,255,.03); }
+    .faq-accordion .accordion-item + .accordion-item{ margin-top:10px }
+    .faq-accordion .accordion-button{ background:transparent; color:var(--txt) }
+    .faq-accordion .accordion-button:not(.collapsed){ background:rgba(255,255,255,.04) }
+
+    /* Stepper (no overlap ever) */
+    .steps{ position:relative; }
+    .step-list{ list-style:none; margin:0; padding:0 0 0 112px; position:relative; }
+    .step-list::before{ content:""; position:absolute; left:56px; top:4px; bottom:4px; width:2px; background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06)); border-radius:2px; }
+    .step{ position:relative; padding:2px 0 34px; transition:transform .25s ease, opacity .25s ease; }
+    .step:last-child{ padding-bottom:0 }
+    .step:hover{ transform:translateY(-2px) }
+    
+    .step h6{ margin:0 0 .35rem 0; font-weight:700; }
+    .step p{ margin:0; color:var(--muted) }
+    @media (max-width:992px){ .step-list{ padding-left:104px } .step-list::before{ left:52px } .step-num{ left:34px } }
+    @media (max-width:576px){ .section{ padding:56px 0 } .step-list{ padding-left:88px } .step-list::before{ left:44px } .step-num{ left:26px; width:34px; height:34px } }
+
+    /* Back-to-top */
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+  </style>
+</head>
+<body>
+  <!-- ambience -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html"><i class="bi bi-flower2 me-1"></i> Local Artisans</a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="band section">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-8" data-aos="fade-right">
+          <div class="section-title mb-2"><span class="dot"></span><h1 class="fw-bold mb-0">Help & FAQ</h1></div>
+          <p class="lead-muted mb-3">Find quick answers, browse topics, or reach our support team.</p>
+          <div class="row g-2">
+            <div class="col-md-7">
+              <div class="input-group">
+                <span class="input-group-text bg-transparent text-secondary"><i class="bi bi-search"></i></span>
+                <input id="faqSearch" class="form-control" placeholder="Search questions (e.g., returns, workshop, shipping)…">
+              </div>
+            </div>
+            <div class="col-md-5 d-flex flex-wrap gap-2">
+              <span class="topic-pill active" data-topic="all"><i class="bi bi-ui-checks"></i> All</span>
+              <span class="topic-pill" data-topic="orders"><i class="bi bi-box-seam"></i> Orders</span>
+              <span class="topic-pill" data-topic="workshops"><i class="bi bi-calendar-event"></i> Workshops</span>
+              <span class="topic-pill" data-topic="shipping"><i class="bi bi-truck"></i> Shipping</span>
+              <span class="topic-pill" data-topic="account"><i class="bi bi-person"></i> Account</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4" data-aos="zoom-in">
+          <div class="card-elevated p-3">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-headset me-1"></i> Need a human?</h6>
+            <div class="small lead-muted">Email: help@localartisans.com<br>Phone: +91-98765-43210 (Mon–Sat)</div>
+            <div class="mt-2"><a href="contact.html" class="btn btn-primary btn-sm">Open a support ticket</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- QUICK LINKS -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-3" data-aos="zoom-in"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="#return-policy"><i class="bi bi-arrow-counterclockwise fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Return policy</h6><div class="small lead-muted">7-day returns with photos</div></a></div>
+        <div class="col-md-3" data-aos="zoom-in" data-aos-delay="60"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="#track-order"><i class="bi bi-truck fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Track order</h6><div class="small lead-muted">Get live updates</div></a></div>
+        <div class="col-md-3" data-aos="zoom-in" data-aos-delay="120"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="#reschedule"><i class="bi bi-calendar2-week fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Reschedule workshop</h6><div class="small lead-muted">Change your slot</div></a></div>
+        <div class="col-md-3" data-aos="zoom-in" data-aos-delay="180"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="register-artisan.html"><i class="bi bi-brush fs-3"></i><h6 class="fw-semibold mt-2 mb-1">Become an artisan</h6><div class="small lead-muted">Apply in minutes</div></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ ACCORDION -->
+  <section class="section pt-0" id="faq">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h4 class="mb-0 fw-semibold">Frequently Asked Questions</h4></div>
+        <div class="d-flex gap-2">
+          <button id="expandAll" class="btn btn-outline-secondary btn-sm">Expand all</button>
+          <button id="collapseAll" class="btn btn-outline-secondary btn-sm">Collapse all</button>
+        </div>
+      </div>
+
+      <div class="accordion faq-accordion" id="faqAcc">
+        <!-- Orders -->
+        <div class="accordion-item" data-topic="orders" id="track-order" data-aos="fade-up">
+          <h2 class="accordion-header" id="q1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a1">
+              How do I track my order?
+            </button>
+          </h2>
+          <div id="a1" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">After shipping, you’ll receive an email/SMS with a tracking link. You can also find it under <em>My Orders</em> in your account.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-topic="orders" data-aos="fade-up" data-aos-delay="40">
+          <h2 class="accordion-header" id="q2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">
+              Can I modify or cancel my order?
+            </button>
+          </h2>
+          <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Edits/cancellations are possible until the item is packed. Reach us quickly via the Contact page with your order ID.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-topic="orders shipping" id="return-policy" data-aos="fade-up" data-aos-delay="80">
+          <h2 class="accordion-header" id="q3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">
+              What is your return & refund policy?
+            </button>
+          </h2>
+          <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">7-day returns from delivery for unused items with original packaging. Email photos + reason; refunds are processed to the original payment method within 3–5 business days after inspection.</div>
+          </div>
+        </div>
+
+        <!-- Shipping -->
+        <div class="accordion-item" data-topic="shipping" data-aos="fade-up">
+          <h2 class="accordion-header" id="q4">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4">
+              Do you ship internationally?
+            </button>
+          </h2>
+          <div id="a4" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Yes, to selected countries. Duties/taxes may apply at destination. ETA is shown at checkout.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-topic="shipping orders" data-aos="fade-up" data-aos-delay="40">
+          <h2 class="accordion-header" id="q5">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a5">
+              My parcel shows delivered but I didn’t receive it.
+            </button>
+          </h2>
+          <div id="a5" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Please check with neighbours/security. If still missing after 24 hours, contact support—we’ll coordinate with the courier.</div>
+          </div>
+        </div>
+
+        <!-- Workshops -->
+        <div class="accordion-item" data-topic="workshops" id="reschedule" data-aos="fade-up">
+          <h2 class="accordion-header" id="q6">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a6">
+              How do I reschedule a workshop?
+            </button>
+          </h2>
+          <div id="a6" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Reschedules are free up to 48 hours before the session. Use the link in your ticket email or write to us with your preferred date.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-topic="workshops" data-aos="fade-up" data-aos-delay="40">
+          <h2 class="accordion-header" id="q7">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a7">
+              Do you provide materials for online workshops?
+            </button>
+          </h2>
+          <div id="a7" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Yes, a basic kit is shipped 5–7 days in advance. A digital tools list is also shared.</div>
+          </div>
+        </div>
+
+        <!-- Account / Payments -->
+        <div class="accordion-item" data-topic="account" data-aos="fade-up">
+          <h2 class="accordion-header" id="q8">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a8">
+              I forgot my password—what do I do?
+            </button>
+          </h2>
+        <div id="a8" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">Click <em>Login → Forgot Password</em> to receive a reset link. If the email isn’t found, check spam or contact support.</div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-topic="account orders" data-aos="fade-up" data-aos-delay="40">
+          <h2 class="accordion-header" id="q9">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a9">
+              What payment methods are accepted?
+            </button>
+          </h2>
+          <div id="a9" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">UPI, major cards, net banking, and select wallets. COD is available for eligible pincodes.</div>
+          </div>
+        </div>
+
+        <!-- General -->
+        <div class="accordion-item" data-topic="orders workshops shipping account" data-aos="fade-up">
+          <h2 class="accordion-header" id="q10">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a10">
+              Is this a real store or a demo?
+            </button>
+          </h2>
+          <div id="a10" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+            <div class="accordion-body">This is a portfolio demo. Cart/checkout are placeholders; flows illustrate the intended UX.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW SUPPORT WORKS -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h4 class="mb-0 fw-semibold">How support works</h4></div>
+      <div class="card-elevated p-4 steps" data-aos="fade-up">
+        <ol class="step-list">
+          <li class="step">
+            <div class="step-num">1</div>
+            <h6>Create a ticket</h6>
+            <p>Use the Contact page or email us. Attach your order ID.</p>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <h6>We acknowledge</h6>
+            <p>Auto-reply with a case number within minutes.</p>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <h6>Resolution</h6>
+            <p>A human responds within 24 business hours with next steps.</p>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <h6>Feedback</h6>
+            <p>Tell us how we did—helps us improve.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPOTLIGHT / EXTRA DEPTH -->
+  <section class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="card-elevated p-4 h-100">
+            <h5 class="fw-bold">Help & FAQ — Spotlight</h5>
+            <p class="lead-muted mb-0">Extended section to make the page more immersive and scroll friendly. Add real photos, quotes, or timelines here.</p>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="70">
+          <div class="card-elevated p-4 h-100">
+            <h5 class="fw-bold">Behind the scenes</h5>
+            <p class="lead-muted mb-0">Share process details, artisan interviews, material sources, or cultural notes for richer engagement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KNOWLEDGE BASE GRID + KPIs -->
+  <section class="section band">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h4 class="mb-0 fw-semibold">Knowledge base</h4></div>
+        <div class="d-flex gap-4 small lead-muted">
+          <div><span id="kbCount" class="fw-bold">0</span> articles</div>
+          <div><span id="solveCount" class="fw-bold">0</span> issues solved</div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="#"><h6 class="fw-semibold mb-1">Returns & refunds</h6><div class="small lead-muted">Policy, photos, timelines</div></a></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="50"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="#"><h6 class="fw-semibold mb-1">Shipping & tracking</h6><div class="small lead-muted">ETAs, couriers, lost parcels</div></a></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100"><a class="card-elevated p-4 d-block text-decoration-none text-reset h-100" href="#"><h6 class="fw-semibold mb-1">Workshops & rescheduling</h6><div class="small lead-muted">Kits, slots, cancellations</div></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / NEWSLETTER -->
+  <section class="section">
+    <div class="container">
+      <div class="card-elevated p-4 p-md-5 text-center" data-aos="fade-up">
+        <h5 class="fw-bold">Still stuck?</h5>
+        <p class="lead-muted mb-3">Open a ticket and we’ll get back within 24 business hours.</p>
+        <a href="contact.html" class="btn btn-primary">Contact Support</a>
+        <hr class="my-4 opacity-10">
+        <p class="lead-muted mb-2">Or get monthly stories & workshop openings:</p>
+        <div class="row g-2 justify-content-center">
+          <div class="col-md-5"><input class="form-control" placeholder="Your email"></div>
+          <div class="col-md-2 d-grid"><button class="btn btn-outline-secondary">Subscribe</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="impactReaders">0</span><span class="small text-secondary">Readers</span></div>
+            <div><span class="h4 mb-0 d-block" id="impactSaves">0</span><span class="small text-secondary">Saves</span></div>
+            <div><span class="h4 mb-0 d-block" id="impactShares">0</span><span class="small text-secondary">Shares</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up-short fs-4"></i></button>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+
+  <script>
+    // AOS animations
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Back-to-top
+    const backTop = document.getElementById('backToTop');
+    document.addEventListener('scroll', () => {
+      document.documentElement.scrollTop > 240 ? backTop.classList.add('show') : backTop.classList.remove('show');
+    }, { passive:true });
+    backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // FAQ: search + topic filter
+    const search = document.getElementById('faqSearch');
+    const items = Array.from(document.querySelectorAll('#faqAcc .accordion-item'));
+    const pills = Array.from(document.querySelectorAll('.topic-pill'));
+    let activeTopic = 'all';
+    function applyFilters(){
+      const q = (search?.value || '').toLowerCase().trim();
+      items.forEach(it=>{
+        const topic = it.dataset.topic || '';
+        const text = it.innerText.toLowerCase();
+        const topicOk = activeTopic === 'all' || topic.includes(activeTopic);
+        const textOk = !q || text.includes(q);
+        it.style.display = (topicOk && textOk) ? '' : 'none';
+      });
+    }
+    search?.addEventListener('input', applyFilters);
+    pills.forEach(p=>{
+      p.addEventListener('click', ()=>{
+        pills.forEach(x=>x.classList.remove('active'));
+        p.classList.add('active');
+        activeTopic = p.dataset.topic;
+        applyFilters();
+      });
+    });
+    document.getElementById('expandAll').addEventListener('click', ()=>{
+      items.filter(i=>i.style.display!=='none').forEach(i=>{
+        const target = i.querySelector('.accordion-collapse');
+        const bsCol = bootstrap.Collapse.getOrCreateInstance(target, { toggle:false });
+        bsCol.show();
+      });
+    });
+    document.getElementById('collapseAll').addEventListener('click', ()=>{
+      items.forEach(i=>{
+        const target = i.querySelector('.accordion-collapse');
+        const bsCol = bootstrap.Collapse.getOrCreateInstance(target, { toggle:false });
+        bsCol.hide();
+      });
+    });
+    applyFilters();
+
+    // CountUp KPIs to add motion + perceived depth (fires when visible)
+    const counters = [
+      { id:'kbCount', end: 42 },
+      { id:'solveCount', end: 1280 },
+      { id:'impactReaders', end: 4200 },
+      { id:'impactSaves', end: 980 },
+      { id:'impactShares', end: 310 }
+    ];
+    function startCount(list){
+      if (!window.CountUp) return;
+      list.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.4, separator:"," });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if (e.isIntersecting) startCount(counters); });
+    }, { threshold:.35 });
+    document.querySelectorAll('#kbCount,#solveCount,#impactReaders,#impactSaves,#impactShares').forEach(el=>io.observe(el));
+  </script>
+</body>
+</html>

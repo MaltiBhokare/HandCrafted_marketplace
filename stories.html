@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Stories</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <!-- Page styles -->
+  <style>
+    :root{
+      --txt:#eef2ff; --muted:#9aa4b2; --bg:#0b0e18;
+      --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 45%,#06b6d4 100%);
+      --grad-soft:linear-gradient(135deg,rgba(124,58,237,.16),rgba(37,99,235,.16) 45%,rgba(6,182,212,.16));
+      --radius:18px; --shadow:0 20px 45px rgba(17,24,39,.45);
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 12% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Floating gradient orbs (visual only) */
+    .scene{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+    .orb{position:absolute;filter:blur(32px);opacity:.28;mix-blend-mode:screen;background:var(--grad);border-radius:999px;animation:float 18s ease-in-out infinite}
+    .orb.o1{width:520px;height:520px;left:-120px;top:-140px}
+    .orb.o2{width:420px;height:420px;right:-140px;top:10%;animation-delay:3s}
+    .orb.o3{width:480px;height:480px;left:22%;bottom:-160px;animation-delay:6s}
+    @keyframes float{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-40px,0)}100%{transform:translate3d(0,0,0)}}
+
+    .section{padding:72px 0}
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{color:var(--muted)!important}
+
+    /* Navbar (working toggler) */
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .navbar-dark .navbar-toggler-icon{
+      background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23eee' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
+    }
+    .navbar .nav-link{position:relative;color:#e5e7eb!important;opacity:.9}
+    .navbar .nav-link.active,.navbar .nav-link:hover{opacity:1}
+    .navbar .nav-link::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--grad);border-radius:999px;transform:scaleX(0);transition:transform .25s ease}
+    .navbar .nav-link:hover::after,.navbar .nav-link.active::after{transform:scaleX(1)}
+
+    /* Chips / filters */
+    .chip{
+      border:1px solid rgba(255,255,255,.14); background:var(--grad-soft);
+      color:#e5e7eb; padding:.5rem .85rem; border-radius:999px; font-size:.85rem; cursor:pointer;
+      transition:transform .2s ease,border-color .2s ease, background .2s ease; user-select:none
+    }
+    .chip:hover,.chip:focus{transform:translateY(-2px); outline:none}
+    .chip.active{background:var(--grad); border-color:transparent}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.94));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius); box-shadow:0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      overflow:hidden;
+    }
+    .card:hover{transform:translateY(-5px); border-color:rgba(124,58,237,.35)}
+    .card-img-top{object-fit:cover;height:220px}
+    .shimmer{position:relative}
+    .shimmer::after{
+      content:""; position:absolute; inset:0; background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.07) 20%,transparent 40%);
+      transform:translateX(-100%); animation:shine 2.2s infinite
+    }
+    @keyframes shine{to{transform:translateX(100%)}}
+
+    /* Bands & extra blocks */
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    /* ===== Enhanced Craft Timeline ===== */
+    .timeline-card{
+      position: relative;
+      border-radius: 22px;
+      padding: 28px 24px 18px 24px;
+      background:
+        radial-gradient(1200px 300px at 0% 0%, rgba(124,58,237,.10), transparent 60%),
+        radial-gradient(1200px 300px at 100% 100%, rgba(6,182,212,.10), transparent 60%),
+        linear-gradient(180deg, rgba(17,21,32,.88), rgba(11,14,24,.94));
+      border:1px solid rgba(255,255,255,.07);
+      box-shadow: 0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      overflow: hidden;
+    }
+    .timeline-card::after{
+      content:""; position:absolute; inset:0; border-radius:22px; pointer-events:none;
+      box-shadow: 0 0 0 1px rgba(124,58,237,.28), inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+    .tl-rail{ position: relative; margin-left: 44px; padding-left: 28px; }
+    .tl-rail::before{
+      content:""; position:absolute; left:8px; top:6px; bottom:6px; width:2px;
+      background: linear-gradient(180deg,#8b5cf6,#38bdf8); border-radius:2px; opacity:.65;
+      transform-origin: top; transform: scaleY(0);
+    }
+    .tl-item{ position:relative; padding: 12px 12px 18px 0; margin-bottom: 10px; }
+    .tl-item:last-child{ margin-bottom: 0 }
+    .tl-dot{
+      position:absolute; left:-44px; top:2px; width:32px; height:32px; border-radius:50%;
+      display:grid; place-items:center; color:#0b0e18; background: var(--grad);
+      box-shadow: 0 6px 18px rgba(124,58,237,.45), 0 0 0 4px rgba(124,58,237,.12);
+    }
+    .tl-title{ font-weight:700; letter-spacing:.2px; display:flex; align-items:center; gap:.5rem; }
+    .tl-badge{
+      font-size:.7rem; padding:.15rem .45rem; border-radius:999px; color:#e5e7eb;
+      background: rgba(124,58,237,.18); border:1px solid rgba(255,255,255,.08);
+    }
+    .tl-text{ color:var(--muted); margin:2px 0 0; }
+    .tl-item:hover .tl-title{ text-shadow: 0 0 18px rgba(56,189,248,.35) }
+    .tl-item:hover .tl-dot{ box-shadow: 0 8px 22px rgba(56,189,248,.45), 0 0 0 6px rgba(37,99,235,.12) }
+    .timeline-card.is-visible .tl-rail::before{ transform: scaleY(1); transition: transform 800ms ease-out }
+    .timeline-card.is-visible .tl-item{ animation: tlFade .55s ease both }
+    .timeline-card.is-visible .tl-item:nth-child(1){ animation-delay:.02s }
+    .timeline-card.is-visible .tl-item:nth-child(2){ animation-delay:.08s }
+    .timeline-card.is-visible .tl-item:nth-child(3){ animation-delay:.14s }
+    .timeline-card.is-visible .tl-item:nth-child(4){ animation-delay:.20s }
+    @keyframes tlFade{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
+    @media (max-width:576px){
+      .tl-rail{ margin-left: 38px; padding-left: 22px }
+      .tl-dot{ left:-38px; width:28px; height:28px }
+    }
+
+    /* Scroll progress + back-to-top */
+    #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    footer{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border-top:1px solid rgba(255,255,255,.06); }
+    @media (max-width:576px){ .section{padding:56px 0} .card-img-top{height:180px} }
+  </style>
+</head>
+<body>
+  <!-- background orbs -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- scroll progress -->
+  <div id="scrollProgress"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+  <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="100" class="me-2">
+  <span style="font-size: 1.2em;">Roots</span>
+  <span style="font-size: 2em; font-weight: bolder;">&</span>
+  <span style="font-size: 1.2em;">Crafts</span>
+</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link active" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html" aria-label="Login"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html" aria-label="Cart"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="section band">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7" data-aos="fade-up">
+          <div class="section-title mb-2"><span class="dot"></span><h1 class="fw-bold mb-0">Cultural Stories</h1></div>
+          <p class="lead-muted">Journeys behind India’s living crafts — materials, motifs, migrations, and makers.</p>
+
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <button class="chip active" data-filter="all" type="button">All</button>
+            <button class="chip" data-filter="Textile" type="button">Textile</button>
+            <button class="chip" data-filter="Metal" type="button">Metal</button>
+            <button class="chip" data-filter="Ceramic" type="button">Ceramic</button>
+            <button class="chip" data-filter="Wood" type="button">Wood</button>
+            <div class="ms-auto d-flex gap-2">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input id="searchInput" class="form-control" placeholder="Search (e.g., Ajrakh, Jaipur)" />
+              </div>
+              <button id="searchBtn" class="btn btn-primary" type="button">Search</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="80">
+          <div class="card p-4 shimmer">
+            <h5 class="fw-semibold mb-2"><i class="bi bi-stars me-1"></i> This Week’s Highlight</h5>
+            <p class="small lead-muted mb-3">How block printers revived a 400-year-old Ajrakh motif using river-friendly dyes.</p>
+            <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#storyModal0">Read Story</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Featured carousel -->
+  <section class="section">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h4 class="mb-0 fw-semibold">Featured Narratives</h4></div>
+        <span class="small lead-muted">Swipe →</span>
+      </div>
+      <div class="swiper" id="storiesSwiper" data-aos="fade-up">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="card p-4 h-100">
+              <h5 class="mb-1">The Journey of Ajrakh</h5>
+              <p class="small lead-muted mb-2">Natural dyes, ancient blocks, living heritage</p>
+              <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#storyModal0">Read</a>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card p-4 h-100">
+              <h5 class="mb-1">Dhokra Metal Casting</h5>
+              <p class="small lead-muted mb-2">Lost-wax tradition from central India</p>
+              <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#storyModal1">Read</a>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card p-4 h-100">
+              <h5 class="mb-1">Blue Pottery of Jaipur</h5>
+              <p class="small lead-muted mb-2">Quartz-based glaze & vibrant motifs</p>
+              <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#storyModal2">Read</a>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stories grid -->
+  <section class="section">
+    <div class="container">
+      <div class="row g-4" id="storiesGrid">
+        <!-- Ajrakh -->
+        <div class="col-md-4" data-aos="fade-up" data-type="Textile" data-title="Ajrakh Journey Natural Dyes Kutch Sindh">
+          <article class="card h-100 shadow-sm">
+            <img src="assets/img/b7.png" class="card-img-top" alt="Ajrakh blocks and indigo vats">
+            <div class="card-body">
+              <h5 class="card-title">The Journey of Ajrakh</h5>
+              <p class="small text-secondary">Natural dyes, ancient blocks, living heritage.</p>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#storyModal0">Read</a>
+            </div>
+          </article>
+        </div>
+        <!-- Dhokra -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="40" data-type="Metal" data-title="Dhokra Metal Casting Bastar Wax">
+          <article class="card h-100 shadow-sm">
+            <img src="assets/img/b8.png" class="card-img-top" alt="Dhokra artisan pouring metal">
+            <div class="card-body">
+              <h5 class="card-title">Dhokra Metal Casting</h5>
+              <p class="small text-secondary">Lost-wax tradition from central India.</p>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#storyModal1">Read</a>
+            </div>
+          </article>
+        </div>
+        <!-- Blue Pottery -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="80" data-type="Ceramic" data-title="Blue Pottery Jaipur Persian Quartz Glaze">
+          <article class="card h-100 shadow-sm">
+            <img src="assets/img/h4.png" class="card-img-top" alt="Blue pottery bowls">
+            <div class="card-body">
+              <h5 class="card-title">Blue Pottery of Jaipur</h5>
+              <p class="small text-secondary">Quartz-based glaze and vibrant motifs.</p>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#storyModal2">Read</a>
+            </div>
+          </article>
+        </div>
+
+        <!-- More length: additional stories -->
+        <div class="col-md-4" data-aos="fade-up" data-type="Wood" data-title="Saharanpur Wood Carving Floral Arabesque">
+          <article class="card h-100 shadow-sm">
+            <img src="assets/img/w1.jpg" class="card-img-top" alt="Wood carving tools on timber">
+            <div class="card-body">
+              <h5 class="card-title">Saharanpur Wood Carving</h5>
+              <p class="small text-secondary">Hand-tooled arabesques and floral lattices.</p>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#storyModal3">Read</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-type="Textile" data-title="Kalamkari Pen Painting Narratives Temple">
+          <article class="card h-100 shadow-sm">
+            <img src="assets/img/b5.png" class="card-img-top" alt="Kalamkari pen painting">
+            <div class="card-body">
+              <h5 class="card-title">Kalamkari Narratives</h5>
+              <p class="small text-secondary">Mythic storytelling with pen, dye, and cloth.</p>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#storyModal4">Read</a>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-type="Ceramic" data-title="Terracotta River Clay Folk Forms">
+          <article class="card h-100 shadow-sm">
+            <img src="assets/img/b6.png" class="card-img-top" alt="Terracotta folk figurines">
+            <div class="card-body">
+              <h5 class="card-title">Terracotta Folk Forms</h5>
+              <p class="small text-secondary">River clay, sun, and community kilns.</p>
+              <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#storyModal5">Read</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Craft timeline band (enhanced) -->
+  <section class="band section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h4 class="mb-0 fw-semibold">Craft Timeline</h4></div>
+      <div class="row g-4">
+        <div class="col-lg-7" data-aos="fade-up">
+          <div class="timeline-card" id="craftTimeline">
+            <div class="tl-rail">
+              <div class="tl-item">
+                <div class="tl-dot"><i class="bi bi-droplet"></i></div>
+                <div class="tl-title">Ancient Indigo &amp; Madder <span class="tl-badge">Dye Routes</span></div>
+                <p class="tl-text">Dyestuff routes connected Sindh, Kutch, and Gujarat with Persia &amp; beyond.</p>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"><i class="bi bi-gem"></i></div>
+                <div class="tl-title">Lost-Wax Bronze Traditions <span class="tl-badge">Metal</span></div>
+                <p class="tl-text">Tribal metal casting aligns ritual, utility, and ornamentation.</p>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"><i class="bi bi-brush"></i></div>
+                <div class="tl-title">Glaze Innovations in Jaipur <span class="tl-badge">Ceramic</span></div>
+                <p class="tl-text">Silica-rich bodies and low-firing quartz glazes shaped a new palette.</p>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"><i class="bi bi-rocket-takeoff"></i></div>
+                <div class="tl-title">Modern Revival &amp; Fair Trade <span class="tl-badge">Today</span></div>
+                <p class="tl-text">Co-ops and studios adapt designs for contemporary markets.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="80">
+          <div class="card p-4 h-100">
+            <h6 class="fw-semibold mb-2"><i class="bi bi-emoji-heart-eyes me-1"></i> Impact counters</h6>
+            <div class="d-flex gap-4">
+              <div><span class="h3 mb-0 d-block" id="countStories">0</span><span class="small text-secondary">Stories</span></div>
+              <div><span class="h3 mb-0 d-block" id="countRegions">0</span><span class="small text-secondary">Regions</span></div>
+              <div><span class="h3 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            </div>
+            <p class="small lead-muted mb-0 mt-2">Numbers grow as the community contributes research and interviews.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee quotes -->
+  <section class="section">
+    <div class="container">
+      <div class="card p-4">
+        <div class="small lead-muted" id="marquee" style="white-space:nowrap; overflow:hidden">
+          <span class="me-5">“Craft is slow by design — it holds time.”</span>
+          <span class="me-5">“Every motif remembers a hand.”</span>
+          <span class="me-5">“Materials are maps of where we live.”</span>
+          <span class="me-5">“Tradition evolves when it meets care.”</span>
+          <span class="me-5">“Color is chemistry, community, and climate.”</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modals (existing + new) -->
+  <div class="modal fade" id="storyModal0" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">The Journey of Ajrakh</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <p>Ajrakh is a resist block-printing technique practised for centuries, using natural indigo and madder. Each layer is printed with precision and patience. River-safe mordants and time-honoured blocks create characteristic stars, chevrons, and mirrored lattices.</p>
+          <p class="small lead-muted mb-0">Kutch • Sindh • Gujarat</p>
+        </div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="storyModal1" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Dhokra Metal Casting</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <p>Dhokra is one of the earliest known methods of non-ferrous metal casting. Beeswax models are coated with clay, heated to drain wax, and filled with molten brass or bronze. The results bear a warm, textured skin unique to this process.</p>
+          <p class="small lead-muted mb-0">Chhattisgarh • Odisha • West Bengal</p>
+        </div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="storyModal2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Blue Pottery of Jaipur</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <p>Jaipur’s blue pottery uses quartz powder and a special glaze that yields striking blues and turquoises, historically inspired by Persian ceramics. Low-temperature firing preserves color brilliance and delicate forms.</p>
+          <p class="small lead-muted mb-0">Jaipur • Rajasthan</p>
+        </div>
+        <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra modals -->
+  <div class="modal fade" id="storyModal3" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Saharanpur Wood Carving</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body"><p>Nested chisels and mallets coax arabesques from shisham and mango wood. Latticed screens and floral medallions carry echoes of Mughal ornament and everyday utility alike.</p></div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+    </div></div>
+  </div>
+  <div class="modal fade" id="storyModal4" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Kalamkari Narratives</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body"><p>Using a tamarind-stem pen, artisans outline epics on cotton, then shade them with plant dyes. Each panel is a scene; each border, a chorus.</p></div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+    </div></div>
+  </div>
+  <div class="modal fade" id="storyModal5" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Terracotta Folk Forms</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body"><p>From votive horses to clay whistles, terracotta holds memory in porous earth. Community kilns and seasonal firings gather neighbours around the glow.</p></div>
+      <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Close</button></div>
+    </div></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="fCount1">0</span><span class="small text-secondary">Readers</span></div>
+            <div><span class="h4 mb-0 d-block" id="fCount2">0</span><span class="small text-secondary">Saves</span></div>
+            <div><span class="h4 mb-0 d-block" id="fCount3">0</span><span class="small text-secondary">Shares</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up-short fs-4"></i></button>
+
+  <!-- Core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- Page behaviors -->
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Active nav highlight
+    const path = location.pathname.split('/').pop() || 'stories.html';
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      const href = a.getAttribute('href'); if (href && href.indexOf(path) !== -1) a.classList.add('active');
+    });
+
+    // Scroll progress + back-to-top
+    const progressEl = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backToTop');
+    document.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / ((h.scrollHeight - h.clientHeight) || 1) * 100;
+      if (progressEl) progressEl.style.width = scrolled + '%';
+      if (backTop){ h.scrollTop > 240 ? backTop.classList.add('show') : backTop.classList.remove('show'); }
+    }, { passive:true });
+    backTop && backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // Swiper
+    if (window.Swiper && document.querySelector('#storiesSwiper')) {
+      new Swiper('#storiesSwiper', {
+        slidesPerView: 1.1,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3} }
+      });
+    }
+
+    // Filters + search
+    const grid = document.getElementById('storiesGrid');
+    const chips = document.querySelectorAll('.chip');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    let activeType = 'all';
+    function applyFilters() {
+      const q = (searchInput?.value || '').trim().toLowerCase();
+      [...grid.children].forEach(col=>{
+        if (!col.matches('[data-type]')) return;
+        const type = (col.getAttribute('data-type') || '').toLowerCase();
+        const title = (col.getAttribute('data-title') || '').toLowerCase();
+        const okType = activeType==='all' || type===activeType.toLowerCase();
+        const okText = !q || title.includes(q);
+        col.style.display = (okType && okText) ? '' : 'none';
+      });
+    }
+    chips.forEach(ch=>{
+      ch.addEventListener('click', ()=>{
+        document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+        ch.classList.add('active');
+        activeType = ch.getAttribute('data-filter') || 'all';
+        applyFilters();
+      });
+    });
+    searchBtn?.addEventListener('click', applyFilters);
+    searchInput?.addEventListener('keydown', e=>{ if(e.key==='Enter') applyFilters(); });
+
+    // GSAP intro stagger for cards
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('#storiesGrid .card').forEach((card, i)=>{
+        gsap.from(card, {
+          y: 28, opacity: 0,
+          scrollTrigger: { trigger: card, start: 'top 85%' },
+          duration:.45, delay:(i % 6) * 0.02
+        });
+      });
+    }
+
+    // Counters
+    const footerCounters = [
+      { id:'fCount1', end:4200, suffix:'+' },
+      { id:'fCount2', end:980, suffix:'+' },
+      { id:'fCount3', end:310, suffix:'+' }
+    ];
+    const impactCounters = [
+      { id:'countStories', end:36, suffix:'' },
+      { id:'countRegions', end:12, suffix:'' },
+      { id:'countArtisans', end:120, suffix:'+' }
+    ];
+    function startCount(items){
+      if (!window.CountUp) return;
+      items.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.6, suffix:c.suffix });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if (e.isIntersecting){
+          startCount(footerCounters.concat(impactCounters));
+        }
+      });
+    }, {threshold:.4});
+    document.querySelectorAll('#fCount1,#fCount2,#fCount3,#countStories,#countRegions,#countArtisans').forEach(el=>io.observe(el));
+
+    // Simple marquee
+    const mq = document.getElementById('marquee');
+    if (mq){
+      let x = 0;
+      const tick = ()=>{ x = (x - 0.6); mq.scrollLeft = Math.abs(x); requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    }
+
+    // Reveal animation for enhanced timeline
+    (() => {
+      const tl = document.getElementById('craftTimeline');
+      if (!tl) return;
+      const watcher = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if (e.isIntersecting){ tl.classList.add('is-visible'); watcher.unobserve(tl); }
+        });
+      }, { threshold:.35 });
+      watcher.observe(tl);
+    })();
+  </script>
+</body>
+</html>

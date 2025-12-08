@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Featured Artists</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <!-- Enhanced Theme Styles (match home/categories vibe; additive only) -->
+  <style>
+    :root{
+      --bg-1:#0e0f12; --bg-2:#10131a; --muted:#9aa4b2; --txt:#eef2ff;
+      --grad: linear-gradient(135deg, #7c3aed 0%, #2563eb 45%, #06b6d4 100%);
+      --grad-soft: linear-gradient(135deg, rgba(124,58,237,.18), rgba(37,99,235,.18) 45%, rgba(6,182,212,.18));
+      --ring: 0 0 0 6px rgba(124,58,237,.15), inset 0 0 0 1px rgba(255,255,255,.06);
+      --shadow: 0 20px 45px rgba(17,24,39,.45); --radius: 18px;
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg-1);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Floating gradient orbs (decor) */
+    .scene{ position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
+    .orb{ position:absolute; filter:blur(32px); opacity:.27; mix-blend-mode:screen;
+          background:var(--grad); border-radius:999px; animation:float 18s ease-in-out infinite; }
+    .orb.o1{width:520px;height:520px; left:-120px; top:-120px}
+    .orb.o2{width:420px;height:420px; right:-120px; top:12%; animation-delay:3s}
+    .orb.o3{width:480px;height:480px; left:20%; bottom:-140px; animation-delay:6s}
+    @keyframes float{ 0%{transform:translate3d(0,0,0)} 50%{transform:translate3d(0,-40px,0)} 100%{transform:translate3d(0,0,0)} }
+
+    .section{padding:70px 0}
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{color:var(--muted)!important}
+
+    /* Navbar glass */
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .navbar .nav-link{ position:relative; color:#e5e7eb!important; opacity:.9; }
+    .navbar .nav-link.active, .navbar .nav-link:hover{opacity:1}
+    .navbar .nav-link::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background:var(--grad); border-radius:999px; transform:scaleX(0); transform-origin:center; transition:transform .25s ease;
+    }
+    .navbar .nav-link:hover::after, .navbar .nav-link.active::after{transform:scaleX(1)}
+    .btn-outline-secondary,.btn-outline-primary{border-color:#94a3b8; color:#e5e7eb}
+    .btn-outline-secondary:hover,.btn-outline-primary:hover{background:var(--grad); border-color:transparent}
+
+    /* Card styling (subtle 3D + ring on hover) */
+    .card{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.92));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow: 0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .card:hover{ transform:translateY(-4px); border-color:rgba(124,58,237,.35) }
+    .card-img-top{ transition:transform .35s ease, filter .35s ease; filter:grayscale(12%) contrast(1.05) }
+    .card:hover .card-img-top{ transform:scale(1.03); filter:grayscale(0%) }
+
+    /* Utility band background for long-page feel */
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    /* Masonry gallery */
+    .masonry{column-count:1; column-gap:1rem}
+    .masonry .m-item{break-inside:avoid; margin:0 0 1rem 0}
+    @media (min-width:576px){ .masonry{column-count:2} }
+    @media (min-width:992px){ .masonry{column-count:3} }
+
+    /* Scroll progress & back-to-top */
+    #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    footer{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border-top:1px solid rgba(255,255,255,.06); }
+  </style>
+</head>
+<body>
+  <!-- floating gradient orbs -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- scroll progress -->
+  <div id="scrollProgress"></div>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+  <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="100" class="me-2">
+  <span style="font-size: 1.2em;">Roots</span>
+  <span style="font-size: 2em; font-weight: bolder;">&</span>
+  <span style="font-size: 1.2em;">Crafts</span>
+</a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Title -->
+  <div class="container py-5">
+    <div class="section-title mb-4" data-aos="fade-up"><span class="dot"></span><h2 class="mb-0 fw-bold">Featured Artists</h2></div>
+
+    <!-- Filter row (non-functional UI stub you can wire later) -->
+    <div class="row g-2 mb-4" data-aos="fade-up" data-aos-delay="50">
+      <div class="col-12 col-md-3">
+        <select class="form-select">
+          <option selected>All Regions</option>
+          <option>Kutch</option><option>Jaipur</option><option>Saharanpur</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <select class="form-select">
+          <option selected>All Categories</option>
+          <option>Pottery</option><option>Textiles</option><option>Woodwork</option><option>Metal</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="input-group">
+          <input class="form-control" placeholder="Search artists by name, region, technique...">
+          <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="row g-4">
+      <div class="col-md-4" data-aos="fade-up" id="anaya">
+        <div class="card h-100 shadow-sm">
+          <a href="assets/img/name.png" class="glightbox" data-gallery="artists">
+            <img src="assets/img/name.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-1">Anaya Ceramics</h5>
+            <p class="small text-secondary">Kutch, Gujarat • Pottery</p>
+            <p class="small">Minimal stoneware with natural glazes. Each piece is wheel-thrown.</p>
+            <a class="btn btn-sm btn-outline-primary" href="gallery.html#anaya">Portfolio</a>
+            <a class="btn btn-sm btn-primary" href="products.html?artisan=anaya">View Products</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="70" id="meera">
+        <div class="card h-100 shadow-sm">
+          <a href="assets/img/name2.png" class="glightbox" data-gallery="artists">
+            <img src="assets/img/name2.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-1">Meera Textiles</h5>
+            <p class="small text-secondary">Bhuj, Gujarat • Textiles</p>
+            <p class="small">Hand-block prints with natural dyes from locally sourced plants.</p>
+            <a class="btn btn-sm btn-outline-primary" href="gallery.html#meera">Portfolio</a>
+            <a class="btn btn-sm btn-primary" href="products.html?artisan=meera">View Products</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="140" id="omwood">
+        <div class="card h-100 shadow-sm">
+          <a href="assets/img/name3.png" class="glightbox" data-gallery="artists">
+            <img src="assets/img/name3.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h5 class="card-title mb-1">Om Woodworks</h5>
+            <p class="small text-secondary">Saharanpur, UP • Woodwork</p>
+            <p class="small">Fine-grain hardwood accessories made with traditional tools.</p>
+            <a class="btn btn-sm btn-outline-primary" href="gallery.html#omwood">Portfolio</a>
+            <a class="btn btn-sm btn-primary" href="products.html?artisan=omwood">View Products</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Artist Spotlight Swiper (quotes) -->
+  <section class="band section">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h2 class="mb-0 fw-bold">Artist Spotlight</h2></div>
+        <div class="small lead-muted">Swipe →</div>
+      </div>
+      <div class="swiper" id="artistQuotes" data-aos="fade-up">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="card p-4 h-100">
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <i class="bi bi-person-circle fs-3"></i>
+                <div>
+                  <div class="fw-semibold">Anaya</div>
+                  <div class="small lead-muted">Ceramics • Kutch</div>
+                </div>
+              </div>
+              <p class="mb-0">“Clay remembers our touch. Every mug is a small archive of warm hands.”</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card p-4 h-100">
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <i class="bi bi-person-circle fs-3"></i>
+                <div>
+                  <div class="fw-semibold">Meera</div>
+                  <div class="small lead-muted">Textiles • Bhuj</div>
+                </div>
+              </div>
+              <p class="mb-0">“Natural dyes breathe with the seasons—each batch tells a new story.”</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card p-4 h-100">
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <i class="bi bi-person-circle fs-3"></i>
+                <div>
+                  <div class="fw-semibold">Om</div>
+                  <div class="small lead-muted">Woodwork • Saharanpur</div>
+                </div>
+              </div>
+              <p class="mb-0">“A chisel and patience—our best tools for carving time into wood.”</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Long-page immersive band (kept from your file, expanded) -->
+  <section class="band section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold">Artists — Spotlight</h5>
+            <p class="lead-muted">Extended section to make the page more immersive and scroll friendly. Add real photos, quotes, or timelines here.</p>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="70">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold">Behind the scenes</h5>
+            <p class="lead-muted">Share process details, artisan interviews, material sources, or cultural notes for richer engagement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Studios & Process (masonry gallery + text) -->
+  <section class="section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-7" data-aos="fade-up">
+          <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Studios & Process</h2></div>
+          <div class="masonry">
+            <a href="assets/img/m1.jpg" class="m-item glightbox card overflow-hidden"><img src="assets/img/m1.jpg" class="card-img-top" alt="Studio 1"></a>
+            <a href="assets/img/p1.jpg" class="m-item glightbox card overflow-hidden"><img src="assets/img/p1.jpg" class="card-img-top" alt="Studio 2"></a>
+            <a href="assets/img/w1.jpg" class="m-item glightbox card overflow-hidden"><img src="assets/img/w1.jpg" class="card-img-top" alt="Studio 3"></a>
+            <a href="assets/img/aa (2).jpg" class="m-item glightbox card overflow-hidden"><img src="assets/img/aa (2).jpg" class="card-img-top" alt="Studio 4"></a>
+            <a href="assets/img/aa (5).jpg" class="m-item glightbox card overflow-hidden"><img src="assets/img/aa (5).jpg" class="card-img-top" alt="Studio 5"></a>
+            <a href="assets/img/aa (6).jpg" class="m-item glightbox card overflow-hidden"><img src="assets/img/aa (6).jpg" class="card-img-top" alt="Studio 6"></a>
+          </div>
+        </div>
+        <div class="col-lg-5" data-aos="fade-up" data-aos-delay="80">
+          <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3">From Sketch to Signature</h5>
+            <ul class="list-unstyled small lead-muted mb-0">
+              <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>Concept sketches & motif research</li>
+              <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>Material tests (clay bodies, threads, finishes)</li>
+              <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>Small-batch prototypes & durability checks</li>
+              <li class="mb-2"><i class="bi bi-check2-circle me-2"></i>Final series with artisan signature</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline band -->
+  <section class="band section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Milestones</h2></div>
+      <div class="row g-4">
+        <div class="col-md-3" data-aos="fade-up">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">2012</div>
+            <div class="lead-muted">First collective formed in Kutch</div>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="60">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">2016</div>
+            <div class="lead-muted">Natural dye lab set up</div>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="120">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">2019</div>
+            <div class="lead-muted">Blue pottery residency</div>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="180">
+          <div class="card p-4 h-100 text-center">
+            <div class="display-6 mb-2">2024</div>
+            <div class="lead-muted">500+ artisans onboard</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">What Buyers Say</h2></div>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up">
+          <div class="card p-4 h-100"><p>“Museum-quality pottery. You can see the love in every curve.”</p><div class="lead-muted">— Aditi, Pune</div></div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="70">
+          <div class="card p-4 h-100"><p>“The Ajrakh scarf feels timeless — my favorite piece this year.”</p><div class="lead-muted">— Rohan, Ahmedabad</div></div>
+        </div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="140">
+          <div class="card p-4 h-100"><p>“Workshops are friendly and inspiring. Learned so much!”</p><div class="lead-muted">— Sana, Mumbai</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA row -->
+  <section class="band section">
+    <div class="container">
+      <div class="card p-5 text-center" data-aos="zoom-in">
+        <h3 class="fw-bold mb-2">Get artist drops & open studio invites</h3>
+        <p class="lead-muted mb-4">No spam—just craft goodness.</p>
+        <div class="row g-2 justify-content-center">
+          <div class="col-sm-7"><input class="form-control form-control-lg" placeholder="Email address"></div>
+          <div class="col-sm-3 d-grid"><button class="btn btn-primary btn-lg">Subscribe</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            <div><span class="h4 mb-0 d-block" id="countProducts">0</span><span class="small text-secondary">Products</span></div>
+            <div><span class="h4 mb-0 d-block" id="countWorkshops">0</span><span class="small text-secondary">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <i class="bi bi-arrow-up-short fs-4"></i>
+  </button>
+
+  <!-- Core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- Page Behaviors (non-breaking; mirrors home/categories additions) -->
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Lightbox
+    if (window.GLightbox) GLightbox({ selector: '.glightbox', touchNavigation: true });
+
+    // Active nav highlight
+    const path = location.pathname.split('/').pop() || 'artists.html';
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      const href = a.getAttribute('href');
+      if (href && href.indexOf(path) !== -1) a.classList.add('active');
+    });
+
+    // Scroll progress + back-to-top
+    const progressEl = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backToTop');
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / ((h.scrollHeight - h.clientHeight) || 1) * 100;
+      if (progressEl) progressEl.style.width = scrolled + '%';
+      if (backTop){
+        if (h.scrollTop > 240) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+      }
+    };
+    document.addEventListener('scroll', onScroll, { passive:true });
+    backTop && backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // CountUp footer KPIs (once on view)
+    const counters = [
+      { id:'countArtisans', end:120, suffix:'+' },
+      { id:'countProducts', end:540, suffix:'+' },
+      { id:'countWorkshops', end:28,  suffix:'' }
+    ];
+    const startCounters = () => {
+      if (!window.CountUp) return;
+      counters.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.6, suffix:c.suffix });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    };
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if (e.isIntersecting) startCounters(); });
+    }, {threshold:.4});
+    document.querySelectorAll('#countArtisans, #countProducts, #countWorkshops').forEach(el=>obs.observe(el));
+
+    // Artist quotes swiper
+    if (window.Swiper && document.querySelector('#artistQuotes')) {
+      new Swiper('#artistQuotes', {
+        slidesPerView: 1.1,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3} }
+      });
+    }
+
+    // Tiny parallax/entrance for cards
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('.card').forEach((card, i) => {
+        gsap.from(card, {
+          y: 24, opacity: 0,
+          scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
+          duration: .45, delay: (i % 6) * 0.02
+        });
+      });
+    }
+
+    // Fancy focus outline for accessibility on keyboard nav only
+    document.body.addEventListener('keydown', e=>{
+      if (e.key === 'Tab') document.documentElement.classList.add('outline');
+    }, { once:true });
+  </script>
+</body>
+</html>

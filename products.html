@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Local Artisans • Products</title>
+
+  <!-- Core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="assets/css/styles.css" rel="stylesheet">
+
+  <!-- Enhanced Theme Styles (additive only) -->
+  <style>
+    :root{
+      --bg-1:#0e0f12; --bg-2:#10131a; --muted:#9aa4b2; --txt:#eef2ff;
+      --grad: linear-gradient(135deg, #7c3aed 0%, #2563eb 45%, #06b6d4 100%);
+      --grad-soft: linear-gradient(135deg, rgba(124,58,237,.18), rgba(37,99,235,.18) 45%, rgba(6,182,212,.18));
+      --ring: 0 0 0 6px rgba(124,58,237,.15), inset 0 0 0 1px rgba(255,255,255,.06);
+      --shadow: 0 20px 45px rgba(17,24,39,.45); --radius:18px;
+    }
+    html,body{
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #141827 0%, #0f1220 55%, #0b0e18 100%),
+        var(--bg-1);
+      color:var(--txt);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Floating gradient orbs */
+    .scene{position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden;}
+    .orb{position:absolute; filter:blur(32px); opacity:.27; mix-blend-mode:screen; background:var(--grad); border-radius:999px; animation:float 18s ease-in-out infinite;}
+    .orb.o1{width:520px;height:520px; left:-120px; top:-120px}
+    .orb.o2{width:420px;height:420px; right:-120px; top:12%; animation-delay:3s}
+    .orb.o3{width:480px;height:480px; left:20%; bottom:-140px; animation-delay:6s}
+    @keyframes float{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-40px,0)}100%{transform:translate3d(0,0,0)}}
+
+    .section{padding:70px 0}
+    .section-title{display:flex;align-items:center;gap:.6rem}
+    .section-title .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#60a5fa)}
+    .lead-muted{color:var(--muted)!important}
+
+    /* Navbar glass */
+    .navbar{ background:rgba(10,12,19,.55)!important; backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06); }
+    .navbar .nav-link{ position:relative; color:#e5e7eb!important; opacity:.9; }
+    .navbar .nav-link.active, .navbar .nav-link:hover{opacity:1}
+    .navbar .nav-link::after{
+      content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background:var(--grad); border-radius:999px; transform:scaleX(0); transform-origin:center; transition:transform .25s ease;
+    }
+    .navbar .nav-link:hover::after, .navbar .nav-link.active::after{transform:scaleX(1)}
+    .btn-outline-secondary,.btn-outline-primary{border-color:#94a3b8; color:#e5e7eb}
+    .btn-outline-secondary:hover,.btn-outline-primary:hover{background:var(--grad); border-color:transparent}
+
+    /* Filter badges */
+    .badge-filter{
+      border:1px solid rgba(255,255,255,.12); background:var(--grad-soft);
+      color:#e5e7eb; padding:.5rem .8rem; border-radius:999px; font-size:.85rem; cursor:pointer;
+      transition:transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .badge-filter:hover{transform:translateY(-2px)}
+    .badge-filter.active{border-color:transparent; background:var(--grad)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg, rgba(21,25,36,.86), rgba(13,16,24,.92));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow: 0 1px 0 rgba(255,255,255,.04), var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .card:hover{ transform:translateY(-4px); border-color:rgba(124,58,237,.35) }
+    .product-card .card-img-top{ transition:transform .35s ease, filter .35s ease; filter:grayscale(10%) contrast(1.05) }
+    .product-card:hover .card-img-top{ transform:scale(1.03); filter:grayscale(0%) }
+
+    /* Like pulse */
+    [data-like].liked{ color:#f43f5e; border-color:#f43f5e!important; background:rgba(244,63,94,.12)!important; }
+    .heart-burst{ position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; box-shadow:var(--ring); transition:opacity .35s ease; }
+    [data-like].liked .heart-burst{opacity:1}
+
+    /* Band background to elongate page */
+    .band{
+      background:
+        radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.12), transparent 60%),
+        radial-gradient(900px 220px at 90% 100%, rgba(6,182,212,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    /* Shimmer skeleton for "loading more" */
+    .skeleton{
+      background: linear-gradient(90deg, rgba(255,255,255,.08) 25%, rgba(255,255,255,.16) 37%, rgba(255,255,255,.08) 63%);
+      background-size:400% 100%; animation: shimmer 1.2s ease-in-out infinite;
+      border-radius:12px; min-height:200px;
+    }
+    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+
+    /* Scroll progress & back-to-top */
+    #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:2000;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    .back-to-top{
+      position:fixed; right:18px; bottom:18px; width:48px; height:48px; display:grid; place-items:center;
+      border:0; background:var(--grad); color:#0b0e18; border-radius:50%;
+      box-shadow:var(--shadow); opacity:0; visibility:hidden; transform:translateY(10px); transition:all .3s ease; z-index:2000;
+    }
+    .back-to-top.show{opacity:1; visibility:visible; transform:translateY(0)}
+
+    footer{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border-top:1px solid rgba(255,255,255,.06); }
+
+    @media (max-width:576px){ .section{padding:56px 0} }
+  </style>
+</head>
+<body>
+  <!-- floating gradient orbs -->
+  <div class="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+  <!-- scroll progress -->
+  <div id="scrollProgress"></div>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+  <img src="assets/img/Red_Purple_Playful_Craft_Studio_Logo-removebg-preview.png" alt="Roots & Crafts Logo" height="100" class="me-2">
+  <span style="font-size: 1.2em;">Roots</span>
+  <span style="font-size: 2em; font-weight: bolder;">&</span>
+  <span style="font-size: 1.2em;">Crafts</span>
+</a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="artists.html">Featured Artists</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html">Artisan Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="workshops.html">Workshops</a></li>
+          <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+          <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary" href="register-artisan.html"><i class="bi bi-brush"></i> Become an Artisan</a>
+          <a class="btn btn-outline-primary" href="login.html"><i class="bi bi-person"></i></a>
+          <a class="btn btn-primary" href="cart.html"><i class="bi bi-bag"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Subtle header band -->
+  <section class="band section py-4">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center gap-3 justify-content-between">
+        <div class="section-title mb-0" data-aos="fade-up"><span class="dot"></span><h2 class="mb-0 fw-bold">Products</h2></div>
+        <div class="d-flex gap-2" data-aos="fade-up" data-aos-delay="50">
+          <input id="searchInput" class="form-control" placeholder="Search (e.g., Ajrakh, Mug, Wood)">
+          <button id="searchBtn" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters + Grid (your original content; only attributes added) -->
+  <div class="container py-5">
+    <div class="d-flex flex-wrap gap-2 mb-3" data-aos="fade-up">
+      <button class="badge-filter active" data-filter="all">All</button>
+      <button class="badge-filter" data-filter="Pottery">Pottery</button>
+      <button class="badge-filter" data-filter="Textiles">Textiles</button>
+      <button class="badge-filter" data-filter="Woodwork">Woodwork</button>
+      <button class="badge-filter" data-filter="Metal">Metal</button>
+      <button id="resetFilters" class="btn btn-sm btn-outline-secondary ms-auto">Reset</button>
+    </div>
+
+    <div id="productGrid" class="row g-4">
+      <!-- I only added data-category + data-name (non-breaking) and small utility spans -->
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="0" data-category="Pottery" data-name="Terracotta Mug Anaya Ceramics">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/q1.png" class="glightbox" data-gallery="quick">
+            <img src="assets/img/q1.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Terracotta Mug</h6>
+            <p class="mb-1 small text-secondary">By Anaya Ceramics</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹699</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/q1.png" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="40" data-category="Textiles" data-name="Ajrakh Scarf Meera Textiles">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/q4.png" class="glightbox" data-gallery="quick">
+            <img src="assets/img/q4.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Ajrakh Scarf</h6>
+            <p class="mb-1 small text-secondary">By Meera Textiles</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹1199</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/placeholder2.svg" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="80" data-category="Woodwork" data-name="Wooden Spoon Set Om Woodworks">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/q3.png" class="glightbox" data-gallery="quick">
+            <img src="assets/img/q3.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Wooden Spoon Set</h6>
+            <p class="mb-1 small text-secondary">By Om Woodworks</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹499</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/q3.png" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="120" data-category="Pottery" data-name="Planter Pot Anaya Ceramics">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/p1.jpg" class="glightbox" data-gallery="quick">
+            <img src="assets/img/p1.jpg" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Planter Pot</h6>
+            <p class="mb-1 small text-secondary">By Anaya Ceramics</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹899</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/w2.jpg" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="160" data-category="Textiles" data-name="Handwoven Stole Meera Textiles">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/w2.jpg" class="glightbox" data-gallery="quick">
+            <img src="assets/img/w2.jpg" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Handwoven Stole</h6>
+            <p class="mb-1 small text-secondary">By Meera Textiles</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹1499</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/w1.jpg" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="200" data-category="Woodwork" data-name="Wooden Coasters Om Woodworks">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/w1.jpg" class="glightbox" data-gallery="quick">
+            <img src="assets/img/w1.jpg" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Wooden Coasters</h6>
+            <p class="mb-1 small text-secondary">By Om Woodworks</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹599</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/w1.jpg" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="240" data-category="Pottery" data-name="Tea Set Anaya Ceramics">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/aa (6).jpg" class="glightbox" data-gallery="quick">
+            <img src="assets/img/aa (6).jpg" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Tea Set</h6>
+            <p class="mb-1 small text-secondary">By Anaya Ceramics</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹1799</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/aa (6).jpg" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="280" data-category="Textiles" data-name="Block-printed Tote Meera Textiles">
+        <div class="card product-card h-100 shadow-sm position-relative">
+          <span class="heart-burst"></span>
+          <a href="assets/img/h4.png" class="glightbox" data-gallery="quick">
+            <img src="assets/img/h4.png" class="card-img-top" alt="">
+          </a>
+          <div class="card-body">
+            <h6 class="card-title">Block-printed Tote</h6>
+            <p class="mb-1 small text-secondary">By Meera Textiles</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>₹899</strong>
+              <div class="d-flex gap-2">
+                <a href="assets/img/h4.png" class="btn btn-sm btn-outline-primary glightbox" data-gallery="quick"><i class="bi bi-eye"></i></a>
+                <button class="btn btn-sm btn-outline-dark" data-like><i class="bi bi-heart"></i></button>
+                <button class="btn btn-sm btn-dark" data-add-cart><i class="bi bi-bag-plus"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /#productGrid -->
+
+  
+
+  <!-- Featured Collections swiper -->
+  <section class="band section">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0"><span class="dot"></span><h2 class="mb-0 fw-bold">Featured Collections</h2></div>
+        <div class="small lead-muted">Swipe →</div>
+      </div>
+      <div class="swiper" id="collectionSwiper" data-aos="fade-up">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="card h-100 p-4 d-flex align-items-start justify-content-center">
+              <h5 class="mb-1">Monsoon Blues</h5>
+              <p class="lead-muted small mb-0">Indigo-dyed textiles & blue pottery curation.</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card h-100 p-4 d-flex align-items-start justify-content-center">
+              <h5 class="mb-1">Earth & Clay</h5>
+              <p class="lead-muted small mb-0">Warm terracotta and hand-thrown forms.</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card h-100 p-4 d-flex align-items-start justify-content-center">
+              <h5 class="mb-1">Carved Grains</h5>
+              <p class="lead-muted small mb-0">Saharanpur hardwood essentials.</p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="card h-100 p-4 d-flex align-items-start justify-content-center">
+              <h5 class="mb-1">Dhokra Finds</h5>
+              <p class="lead-muted small mb-0">Lost-wax brass artifacts & accents.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust / Why handmade -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Why Buy Handmade</h2></div>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up"><div class="card p-4 h-100"><h6 class="fw-semibold mb-2"><i class="bi bi-shield-check me-1"></i> Fair & Authentic</h6><p class="lead-muted mb-0">Direct artisan partnerships with transparent pricing.</p></div></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="70"><div class="card p-4 h-100"><h6 class="fw-semibold mb-2"><i class="bi bi-recycle me-1"></i> Sustainable</h6><p class="lead-muted mb-0">Natural materials, low-waste processes, small batches.</p></div></div>
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="140"><div class="card p-4 h-100"><h6 class="fw-semibold mb-2"><i class="bi bi-stars me-1"></i> One-of-a-kind</h6><p class="lead-muted mb-0">Subtle variations that make every piece unique.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ (accordion) -->
+  <section class="band section">
+    <div class="container">
+      <div class="section-title mb-3"><span class="dot"></span><h2 class="mb-0 fw-bold">Product FAQs</h2></div>
+      <div class="accordion" id="faq">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="q1"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a1">Are colors exactly as shown?</button></h2>
+          <div id="a1" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body small lead-muted">Natural dyes and glazes may vary slightly due to handcrafted processes and device displays.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="q2"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">How do returns work?</button></h2>
+          <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body small lead-muted">Eligible items can be returned within 7 days in original condition. See Policies for details.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="q3"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">Do you ship internationally?</button></h2>
+          <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faq"><div class="accordion-body small lead-muted">Yes, with region-specific courier partners. Shipping costs appear at checkout.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Email CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="card p-5 text-center" data-aos="zoom-in">
+        <h3 class="fw-bold mb-2">Get product drops & craft stories</h3>
+        <p class="lead-muted mb-4">No spam—only inspiring handcraft.</p>
+        <div class="row g-2 justify-content-center">
+          <div class="col-sm-7"><input class="form-control form-control-lg" placeholder="Email address"></div>
+          <div class="col-sm-3 d-grid"><button class="btn btn-primary btn-lg">Subscribe</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-5 border-top">
+    <div class="container py-5">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">Local Artisans</h5>
+          <p class="small text-secondary">A curated marketplace celebrating handcraft, culture, and community.</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a href="artists.html" class="link-body-emphasis">Artists</a></li>
+            <li><a href="products.html" class="link-body-emphasis">Products</a></li>
+            <li><a href="workshops.html" class="link-body-emphasis">Workshops</a></li>
+            <li><a href="stories.html" class="link-body-emphasis">Stories</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-semibold">Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="about.html">About</a></li>
+            <li><a href="faq.html">Help & FAQ</a></li>
+            <li><a href="policies.html">Policies</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Impact</h6>
+          <div class="d-flex gap-4">
+            <div><span class="h4 mb-0 d-block" id="countArtisans">0</span><span class="small text-secondary">Artisans</span></div>
+            <div><span class="h4 mb-0 d-block" id="countProducts">0</span><span class="small text-secondary">Products</span></div>
+            <div><span class="h4 mb-0 d-block" id="countWorkshops">0</span><span class="small text-secondary">Workshops</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="small text-secondary mt-3">© 2025 Local Artisans. Handcrafted with ♥.</div>
+    </div>
+  </footer>
+
+  <!-- Back-to-top -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <i class="bi bi-arrow-up-short fs-4"></i>
+  </button>
+
+  <!-- Core JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/CountUp.min.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- Page Behaviors (additive only) -->
+  <script>
+    // AOS
+    if (window.AOS) AOS.init({ duration:800, once:true, easing:'ease-out-quart' });
+
+    // Lightbox
+    if (window.GLightbox) GLightbox({ selector: '.glightbox', touchNavigation: true });
+
+    // Active nav highlight
+    const path = location.pathname.split('/').pop() || 'products.html';
+    document.querySelectorAll('.navbar .nav-link').forEach(a => {
+      const href = a.getAttribute('href'); if (href && href.indexOf(path) !== -1) a.classList.add('active');
+    });
+
+    // Scroll progress + back-to-top
+    const progressEl = document.getElementById('scrollProgress');
+    const backTop = document.getElementById('backToTop');
+    const onScroll = () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / ((h.scrollHeight - h.clientHeight) || 1) * 100;
+      if (progressEl) progressEl.style.width = scrolled + '%';
+      if (backTop){
+        if (h.scrollTop > 240) backTop.classList.add('show');
+        else backTop.classList.remove('show');
+      }
+    };
+    document.addEventListener('scroll', onScroll, { passive:true });
+    backTop && backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+    // CountUp footer KPIs (once on view)
+    const counters = [
+      { id:'countArtisans', end:120, suffix:'+' },
+      { id:'countProducts', end:540, suffix:'+' },
+      { id:'countWorkshops', end:28,  suffix:'' }
+    ];
+    const startCounters = () => {
+      if (!window.CountUp) return;
+      counters.forEach(c=>{
+        const el = document.getElementById(c.id);
+        if (!el || el.dataset.done) return;
+        const cu = new CountUp(c.id, c.end, { duration:1.6, suffix:c.suffix });
+        if (!cu.error){ cu.start(); el.dataset.done = "1"; }
+      });
+    };
+    const obs = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if (e.isIntersecting) startCounters(); }); }, {threshold:.4});
+    document.querySelectorAll('#countArtisans, #countProducts, #countWorkshops').forEach(el=>obs.observe(el));
+
+    // Collections swiper
+    if (window.Swiper && document.querySelector('#collectionSwiper')) {
+      new Swiper('#collectionSwiper', {
+        slidesPerView: 1.1,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: { delay: 2600, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        breakpoints: { 576:{slidesPerView:2}, 992:{slidesPerView:3} }
+      });
+    }
+
+    // Filter logic (category + search)
+    const grid = document.getElementById('productGrid');
+    const filterBtns = document.querySelectorAll('.badge-filter');
+    const resetBtn = document.getElementById('resetFilters');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    let activeFilter = 'all';
+
+    function applyFilters(){
+      const q = (searchInput?.value || '').trim().toLowerCase();
+      [...grid.children].forEach(col=>{
+        const cat = (col.getAttribute('data-category') || '').toLowerCase();
+        const name = (col.getAttribute('data-name') || '').toLowerCase();
+        const matchCat = activeFilter === 'all' || cat === activeFilter.toLowerCase();
+        const matchText = !q || name.includes(q);
+        col.style.display = (matchCat && matchText) ? '' : 'none';
+      });
+    }
+    filterBtns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        filterBtns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.getAttribute('data-filter') || 'all';
+        applyFilters();
+      });
+    });
+    resetBtn?.addEventListener('click', ()=>{
+      activeFilter = 'all';
+      searchInput.value = '';
+      filterBtns.forEach(b=>b.classList.remove('active'));
+      document.querySelector('.badge-filter[data-filter="all"]').classList.add('active');
+      applyFilters();
+    });
+    searchBtn?.addEventListener('click', applyFilters);
+    searchInput?.addEventListener('keydown', e=>{ if(e.key==='Enter') applyFilters(); });
+
+    // Like + Add-to-cart micro-interactions
+    document.querySelectorAll('[data-like]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btn.classList.toggle('liked');
+        btn.innerHTML = btn.classList.contains('liked') ? '<i class="bi bi-heart-fill"></i>' : '<i class="bi bi-heart"></i>';
+      });
+    });
+    document.querySelectorAll('[data-add-cart]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btn.disabled = true;
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check2"></i>';
+        setTimeout(()=>{ btn.innerHTML = orig; btn.disabled = false; }, 900);
+      });
+    });
+
+    // Subtle entrance for cards
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('.product-card').forEach((card, i) => {
+        gsap.from(card, {
+          y: 24, opacity: 0,
+          scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
+          duration: .45, delay: (i % 6) * 0.02
+        });
+      });
+    }
+  </script>
+</body>
+</html>
