@@ -65,13 +65,36 @@
     .topic-pill.active{ box-shadow:0 0 0 2px rgba(124,58,237,.35) inset }
 
     /* Vertical timeline for "Policy updates" */
-    .timeline{position:relative;padding-left:68px}
-    .timeline::before{content:"";position:absolute;left:32px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.14)}
-    .t-item{position:relative;margin-bottom:26px}
-    .t-item::before{content:"";position:absolute;left:24px;top:.45rem;width:16px;height:16px;border-radius:50%;background:var(--grad);box-shadow:0 0 0 4px rgba(124,58,237,.18)}
-    .t-item:last-child{margin-bottom:0}
+    /* Vertical timeline for "Policy updates" */
+.timeline{position:relative;padding-left:68px}
+.timeline::before{
+  content:"";
+  position:absolute;
+  left:32px;        /* center line in the left gutter */
+  top:0;bottom:0;
+  width:2px;
+  background:rgba(255,255,255,.14)
+}
 
-    .badge-soft{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:999px;padding:.15rem .5rem}
+.t-item{position:relative;margin-bottom:26px}
+.t-item::before{
+  content:"";
+  position:absolute;
+  left:-36px;       /* was 24px; move dot into the gutter (68 - 32 = 36) */
+  top:.45rem;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--grad);
+  box-shadow:0 0 0 4px rgba(124,58,237,.18)
+}
+.t-item:last-child{margin-bottom:0}
+
+.badge-soft{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:999px;
+  padding:.15rem .5rem
+}
+
 
     /* Back-to-top */
     .back-to-top{
